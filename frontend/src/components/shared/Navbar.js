@@ -67,6 +67,11 @@ export default function Navbar() {
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0 p-1'>
+                                        <Link className='nav-link hoverBox' aria-current='page' to='/lawyers'>
+                                            Service Providers
+                                        </Link>
+                                    </li>
+                                    <li className='nav-item border border-dark border-1 border-top-0 p-1'>
                                         <Link className='nav-link hoverBox' aria-current='page' to='/about'>
                                             About Us
                                         </Link>

@@ -46,6 +46,10 @@ code {
   color: #9a1919;
 }
 
+.myText {
+  color: #9a1919;
+}
+
 .mybg {
   background-color: #9a1919;
 }
@@ -91,6 +95,11 @@ code {
   }
 }
 
+.arrow{
+  font-size: 1.5rem;
+  margin: 5px;
+}
+
 @media (max-width: 635px) {
   .disappear {
     display: none;
@@ -98,7 +107,7 @@ code {
 }
 
 .text-para {
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .my-bold {

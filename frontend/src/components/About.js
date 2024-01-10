@@ -10,7 +10,7 @@ export default function About() {
                 <div className='row'>
                     <div className='col-lg-6 col-md-12 mt-3'>
                         <h2 className='fw-bold break-word word-wrap'>Welcome to <span className='fs-1 mainText'>Legal-Ease India</span></h2>
-                        <p className='text-para my-1'>
+                        <p className='text-para my-3'>
                             At Legal-Ease India, we are on a mission to revolutionize the way legal services are accessed and delivered. We understand that legal matters are an integral part of our lives, and the traditional methods of seeking legal assistance can often be time-consuming and challenging.
                         </p>
                         <h2 className='fw-bold break-word word-wrap mt-4'> Our Vision</h2>

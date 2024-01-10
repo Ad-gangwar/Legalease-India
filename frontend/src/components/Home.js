@@ -51,13 +51,13 @@ export default function Home() {
             }}
           /> */}
           <div className="carousel-item active">
-            <img src="https://lawmin.gov.in/sites/default/files/banner-img3.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(70%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/banner-img3.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
           </div>
           <div className="carousel-item">
-            <img src="https://lawmin.gov.in/sites/default/files/AzadikaAmritMahotsav-lawmin.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(70%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/AzadikaAmritMahotsav-lawmin.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
           </div>
           <div className="carousel-item">
-            <img src="https://lawmin.gov.in/sites/default/files/G20.png" className="d-block img-fluid" alt="..." style={{ filter: "brightness(70%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/G20.png" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
           </div>
         </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
