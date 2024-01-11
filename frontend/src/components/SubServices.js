@@ -14,7 +14,7 @@ export default function SubServices() {
                         <input
                             type="search"
                             className="py-3 px-3 w-100 border-0 cursor-pointer rounded-start shadow-lg"
-                            placeholder="Search Servide"
+                            placeholder="Search Service"
                         />
                         <button className="btn mt-0 rounded-0 rounded-end btn-danger shadow-lg">
                             Search

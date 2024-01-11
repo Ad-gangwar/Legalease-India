@@ -37,7 +37,7 @@ const lawyerCard = ({ lawyer }) => {
                         At {lawyer.lawFirm}
                     </p>
                 </div>
-                <Link to="#" className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
+                <Link to={"/lawyer/" + lawyer.id} className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
                     <BsArrowRight className='arrow mx-0'/>
                 </Link>
             </div>

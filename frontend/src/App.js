@@ -7,6 +7,7 @@ import About from './components/About';
 import Services from './components/Services';
 import Contact from './components/Contact';
 import Lawyers from './components/Lawyer/Lawyers';
+import LawyerDetails from './components/Lawyer/LawyerDetails';
 import SubServices from './components/SubServices';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
           <Route path='/services' element={<Services />}></Route>
           <Route path='/subServices' element={<SubServices/>}></Route>
           <Route path='/contact' element={<Contact />}></Route>
+          <Route path='lawyer/:lawyerId' element={<LawyerDetails />}></Route>
           <Route path='/lawyers' element={<Lawyers />}></Route>
         </Routes>
       </BrowserRouter>

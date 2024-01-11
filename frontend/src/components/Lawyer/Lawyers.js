@@ -28,7 +28,7 @@ export default function Lawyers() {
       <div className="container">
         <div className="row w-100 mx-auto">
           {lawyersData.map((lawyer, index) => (
-            <div key={lawyer.id} className="col col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2">
+            <div key={lawyer.id} className="col col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2 mx-auto" style={{maxWidth: "350px"}}>
               <LawyerCard lawyer={lawyer} />
             </div>
           ))}

@@ -36,20 +36,6 @@ export default function Home() {
     <Layout>
       <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
-          {/* <input
-            className="form-control my-3 shadow-lg"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            style={{
-              maxWidth: "80%",
-              position: "absolute",
-              top: "15%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: "10",
-            }}
-          /> */}
           <div className="carousel-item active">
             <img src="https://lawmin.gov.in/sites/default/files/banner-img3.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
           </div>

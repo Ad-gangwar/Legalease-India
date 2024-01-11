@@ -118,16 +118,16 @@ code {
   cursor: pointer;
 }
 
-.img-fluid {
-  object-fit: contain;
-  height: 100%;
-  width: 100%;
-}
-
 .input-border {
   border-bottom: 2px solid rgb(160, 160, 160) !important;
 }
 
 .sbg{
   background-color: #eadad9 !important;
+}
+
+.tab-btn{
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom:2px solid #9a1919 !important;
 }
