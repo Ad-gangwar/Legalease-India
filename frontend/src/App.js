@@ -9,6 +9,7 @@ import Contact from './components/Contact';
 import Lawyers from './components/Lawyer/Lawyers';
 import LawyerDetails from './components/Lawyer/LawyerDetails';
 import SubServices from './components/SubServices';
+import DocumentService from './components/DocService';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path='/about' element={<About />}></Route>
           <Route path='/services' element={<Services />}></Route>
           <Route path='/subServices' element={<SubServices/>}></Route>
+          <Route path='/DocumentServices/:name' element={<DocumentService/>}></Route>
           <Route path='/contact' element={<Contact />}></Route>
           <Route path='lawyer/:lawyerId' element={<LawyerDetails />}></Route>
           <Route path='/lawyers' element={<Lawyers />}></Route>

@@ -1,6 +1,6 @@
 export const documentServices = [
     {
-      name: "Permanent Account Number (PAN) Card",
+      name: "PAN Card",
       description: ''
     },
     {

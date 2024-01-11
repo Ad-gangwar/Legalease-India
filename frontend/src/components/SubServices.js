@@ -31,7 +31,7 @@ export default function SubServices() {
                                 <h3 className="mb-3 my-bold">{item.name}</h3>
                                 {/* <p className="mb-4">{item.description}</p> */}
                                 <div className="d-flex justify-content-between">
-                                    <Link to="#" className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
+                                    <Link to={"/DocumentServices/" + item.name.replace(/\s+/g, '')} className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
                                         <BsArrowRight className='arrow mx-0' />
                                     </Link>
                                     <span className="px-3 d-flex align-items-center rounded-start text-white my-bold mybg">{index + 1}</span>
