@@ -20,7 +20,7 @@ export default function MyAccount() {
 
   return (
     <Layout>
-      <section>
+      <section className='mb-5'>
         <div className="container mt-5 mb-3" style={{ maxWidth: "1300px" }}>
           {loading && !error && <Loading />}
           {/* {error && !loading && <Error errMessage={error} />} */}
@@ -51,7 +51,7 @@ export default function MyAccount() {
             </div>
             <div className='col-md-8'>
               {tab==='overview' && <Overview lawyer={cookies.user}/>}
-              {tab==='profile' && <Profile/>}
+              {tab==='profile' && <Profile lawyer={cookies.user}/>}
               {tab==='requests' && <ServiceReqs/>}
             </div>
           </div>
