@@ -1,4 +1,5 @@
-export const PANCard = [
+const Documents = {
+  PANCard: [
     {
       category: "Proof of Identity",
       documents: [
@@ -34,9 +35,9 @@ export const PANCard = [
         { name: "Recent passport-sized photograph" },
       ],
     },
-  ];
+  ],
   
-  export const PANCardPoints = [
+  PANCardPoints: [
     "Photograph requirement waived for individuals below 18.",
     "Address on the application must match the proof of address.",
     "Sign within the designated space matching supporting documents.",
@@ -44,5 +45,7 @@ export const PANCard = [
     "Apply online via official NSDL or UTIITSL websites or at authorized PAN centers.",
     "Your data is secure. We prioritize the protection of your personal information.",
     "Our website ensures a smooth and easy application process.",
-  ];
-  
+  ],
+};
+
+export default Documents;

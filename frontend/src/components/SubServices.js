@@ -23,10 +23,10 @@ export default function SubServices() {
                 </div>
             </section>
 
-            <div className="container-md mt-5">
+            <div className="container-md my-5">
                 <div className="row">
                     {documentServices.map((item, index) => (
-                        <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-5" key={index}>
+                        <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-5 pulse" key={index}>
                             <div className="p-4 shadow  d-flex flex-column justify-content-between" style={{ height: "100%" }}>
                                 <h3 className="mb-3 my-bold">{item.name}</h3>
                                 {/* <p className="mb-4">{item.description}</p> */}

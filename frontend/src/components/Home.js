@@ -37,13 +37,13 @@ export default function Home() {
       <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src="https://lawmin.gov.in/sites/default/files/banner-img3.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/banner-img3.jpg" className="d-block img-fluid" alt="..." />
           </div>
           <div className="carousel-item">
-            <img src="https://lawmin.gov.in/sites/default/files/AzadikaAmritMahotsav-lawmin.jpg" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/AzadikaAmritMahotsav-lawmin.jpg" className="d-block img-fluid" alt="..."/>
           </div>
           <div className="carousel-item">
-            <img src="https://lawmin.gov.in/sites/default/files/G20.png" className="d-block img-fluid" alt="..." style={{ filter: "brightness(90%)" }} />
+            <img src="https://lawmin.gov.in/sites/default/files/G20.png" className="d-block img-fluid" alt="..."  />
           </div>
         </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -105,7 +105,7 @@ export default function Home() {
           <h2 className='text-center fw-bold mainText display-6 mb-4'>Our Services</h2>
           <div className="row">
             {services.slice(0, 6).map((item, index) => (
-              <div className="col-lg-4 col-md-6 col-12 mb-5" key={index}>
+              <div className="col-lg-4 col-md-6 col-12 mb-5 pulse" key={index}>
                 <ServiceCard item={item} index={index} />
               </div>
             ))}

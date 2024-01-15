@@ -3,7 +3,7 @@ import lawyer2 from '../images/lawyer-02.jpg';
 
 export const lawyersData = [
     {
-      id: "01",
+      id: "65a143530b6c152e41bd9a24",
       name: "John Doe",
       specialization: "Criminal Defense",
       experience: "10+ years",
@@ -24,29 +24,7 @@ export const lawyersData = [
       casesHandled: 200,
       lawFirm: "Smith Legal Services",
     },
-    {
-      id: "02",
-      name: "Jane Smith",
-      specialization: "Family Law",
-      experience: "8 years",
-      rating: 4.5,
-      totalReviews: 90,
-      photo: lawyer2,
-      casesHandled: 200,
-      lawFirm: "Smith Legal Services",
-    },
-    {
-      id: "02",
-      name: "Jane Smith",
-      specialization: "Family Law",
-      experience: "8 years",
-      rating: 4.5,
-      totalReviews: 90,
-      photo: lawyer2,
-      casesHandled: 200,
-      lawFirm: "Smith Legal Services",
-    },
-    // Add more lawyers as needed
+    
   ];
   
  export const notariesData = [

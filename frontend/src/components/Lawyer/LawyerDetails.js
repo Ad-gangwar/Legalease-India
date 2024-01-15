@@ -1,29 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout'
 import { useParams } from 'react-router-dom';
 import { lawyersData } from '../../assets/data/lawyers';
 import starIcon from '../../assets/images/Star.png';
 import AboutLawyer from './AboutLawyer';
 import Feedback from './Feedback';
+import { useCookies } from 'react-cookie';
+import lawyerContext from '../context/LawyerContext';
+
 
 export default function LawyerDetails() {
+  const navigate = useNavigate();
   const { lawyerId } = useParams();
   const [lawyer, setData] = useState({});
   const [tab, setTab] = useState('about');
+  const { selectedLawyer, setSelectedLawyer } = useContext(lawyerContext);
+  const [cookies] = useCookies(["docName"])
+  const docName = cookies.docName;
+
   useEffect(() => {
     function fetchData() {
-      const selectedLawyer = lawyersData.find(lawyer => lawyer.id === lawyerId);
-      if (selectedLawyer) {
-        setData(selectedLawyer);
+      const myLawyer = lawyersData.find(lawyer => lawyer.id === lawyerId);
+      if (myLawyer) {
+        setData(myLawyer);
       }
     }
 
     fetchData();
   }, [lawyerId]);
 
+
+  const handleSelectLawyer = async () => {
+    // Set the selected lawyer in the context
+    await setSelectedLawyer(lawyer);
+    navigate("/DocumentServices/" + docName);
+  };
+
   return (
     <Layout>
-      <section style={{ maxWidth: "1270px" }} className='w-100 mx-auto mt-5'>
+      <section style={{ maxWidth: "1270px" }} className='w-100 mx-auto my-5'>
         <div className='container mx-auto w-100'>
           <div className='row'>
             <div className='col-md-8'>
@@ -31,12 +47,12 @@ export default function LawyerDetails() {
                 <div className='row'>
                   <div className='col-lg-3 col-md-3 my-2'>
                     <figure className='d-flex align-items-center h-100 w-100 mx-auto' style={{ maxWidth: "220px" }}>
-                      <img src={lawyer.photo} alt='' className='w-100 rounded' />
+                      <img src={lawyer.photo} alt='' className='w-100 rounded-top' />
                     </figure>
                   </div>
 
                   <div className='col-lg-9 col-md-9 d-flex justify-content-center flex-column'>
-                    <span className='d-inline-flex p-2 rounded ' style={{ color: "#00a8c6", backgroundColor: "#CCF0F3" }}>
+                    <span className='d-inline-flex p-2 rounded-end' style={{ color: "#00a8c6", backgroundColor: "#CCF0F3" }}>
                       {lawyer.specialization}
                     </span>
                     <h3 className='iconText mt-3 myText'>
@@ -52,7 +68,7 @@ export default function LawyerDetails() {
                       </span>
                     </div>
                     <p>
-                    Experienced {lawyer.specialization} delivering top-notch legal representation.
+                      Experienced {lawyer.specialization} delivering top-notch legal representation.
                     </p>
                   </div>
                 </div>
@@ -97,7 +113,7 @@ export default function LawyerDetails() {
                   </span>
                 </div>
 
-                <button className='btn btn-danger rounded-md w-100 px-2 text-center'>Select Lawyer</button>
+                <button className='btn btn-danger rounded-md w-100 px-2 text-center' onClick={handleSelectLawyer}>Select Lawyer</button>
               </div>
             </div>
           </div>
