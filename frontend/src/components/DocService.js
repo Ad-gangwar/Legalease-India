@@ -56,11 +56,12 @@ export default function DocumentService() {
                 // You can redirect to a success page or perform any other actions
                 toast.success("Service request successful!");
             } else {
-                toast.error("Service request failed:", response.message);
+                toast.error(response.message);
             }
             setLoading(false);
         } catch (error) {
-            console.error("Error submitting service request:", error);
+            toast.error("You are not authorized😒 Try logging In.");
+            console.log(error);
             setLoading(false);
         }
     };

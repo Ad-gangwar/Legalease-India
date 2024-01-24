@@ -152,7 +152,7 @@ export default function Profile({ lawyer }) {
 
   return (
     <div style={{ maxWidth: '700px' }} className="mx-auto">
-      {lawyer.isApproved && (
+      {!lawyer.isApproved && (
         <p className="p-2 rounded bg-warning bg-opacity-25" style={{ color: 'brown' }}>
           <span className="mx-1">
             <FiAlertCircle />

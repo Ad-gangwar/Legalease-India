@@ -45,7 +45,7 @@ export default function Login() {
 
     return (
         <Layout>
-            <section className='my-5 py-2'>
+            <section className='my-5 py-2 mx-3'>
                 <div className='container w-100 mx-auto rounded-lg shadow-lg my-5 p-4' style={{ maxWidth: "570px" }}>
                     <h3 className='fs-3 iconText mb-4 text-center'>
                         Hello! <span className='text-danger'>Welcome</span> Back 🎉

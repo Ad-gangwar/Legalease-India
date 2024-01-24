@@ -14,7 +14,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import MyAccount from './components/my-account/User/MyAccount';
 import Dashboard from './components/my-account/Lawyer/Dashboard';
 import lawyerContext from './components/context/LawyerContext';
-
+import ProtectedRoutes from './ProtectedRoutes';
 
 export default function App() {
   const [selectedLawyer, setSelectedLawyer] = useState(null);
@@ -41,8 +41,8 @@ export default function App() {
             <Route path='/contact' element={<Contact />}></Route>
             <Route path='lawyer/:lawyerId' element={<LawyerDetails />}></Route>
             <Route path='/lawyers' element={<Lawyers />}></Route>
-            <Route path='/users/profile/me' element={<MyAccount />}></Route>
-            <Route path='/lawyers/profile/me' element={<Dashboard />}></Route>
+            <Route path='/users/profile/me' element={<ProtectedRoutes allowedRoles={['user']}><MyAccount /></ProtectedRoutes>}></Route>
+            <Route path='/lawyers/profile/me' element={<ProtectedRoutes allowedRoles={['lawyer']}><Dashboard /></ProtectedRoutes>}></Route>
           </Routes>
         </lawyerContext.Provider>
       </BrowserRouter>

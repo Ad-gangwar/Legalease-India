@@ -27,7 +27,7 @@ export default function MyAccount() {
           {error && !loading && <Error errMessage={error} />}
           {!loading && !error && (
             <div className="row">
-              <div className="col-md-4 pb-4 shadow-lg mx-auto" style={{ maxWidth: "22rem", maxHeight: "30rem"}}>
+              <div className="col-md-4 pb-4 shadow-lg mx-auto mb-4" style={{ maxWidth: "22rem", maxHeight: "30rem"}}>
                 <div className="mt-5 container">
                   <section className='my-5 text-center my-bold cursor-pointer d-flex flex-column'>
                     <button onClick={() => setTab('overview')} className={`btn ${tab === 'overview' ? 'btn-info' : 'btn'} me-2 py-3`}>

@@ -86,7 +86,7 @@ export default function Home() {
         <div className='container m-5 mx-auto'>
           <div className='row'>
             <div className='col-lg-4 col-md-12 p-3 px-4 text-center'>
-              <img src={LawyerImg} alt='' className='rounded-circle img-fluid' style={{ maxWidth: "350px" }} />
+              <img src={LawyerImg} alt='' className='rounded-circle img-fluid' style={{ maxWidth: "320px" }} />
             </div>
             <div className='col-lg-8 col-md-12 p-3 px-5 d-flex align-items-start flex-column justify-content-center'>
               <h2 className='fw-bold break-word word-wrap  text-start'>Welcome to <span className='fs-1 mainText'>Legal-Ease India</span></h2>
@@ -121,7 +121,7 @@ export default function Home() {
           <h3 className="text-center iconText">Frequently Asked Questions</h3>
           <div className="accordion mt-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="accordion-item" style={{ width: '80%', margin: 'auto' }}>
+              <div key={index} className="accordion-item" style={{ width: '90%', margin: 'auto' }}>
                 <h2 className="accordion-header" id={`faqHeading${index}`}>
                   <button
                     className={`accordion-button ${selectedQuestion === index ? '' : 'collapsed'}`}
