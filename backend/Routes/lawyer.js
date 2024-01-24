@@ -71,7 +71,7 @@ const getMyServiceReqs = async(req, res)=>{
 }
 
 const getLawyerProfile = async(req, res)=>{
-    const lawyerId=req.userId;
+    const lawyerId=req.user._id;
 
     try{
         const lawyer=await Lawyer.findById(lawyerId);

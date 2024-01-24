@@ -1,15 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { Icon } from '@iconify/react';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
+import toast from 'react-hot-toast';
+import { useCookies } from 'react-cookie';
+import HashLoader from 'react-spinners/HashLoader';
+import { URL } from '../../../utils/config';
 
 export default function Profile({ lawyer }) {
   const [qualificationForms, setQualificationForms] = useState([]);
+  const [experienceForms, setExperienceForms] = useState([]);
   const [selectedFile, setSelectedFile] = useState("");
   const [previewURL, setPreviewURL] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cookies] = useCookies(["token"]);
+  const token = cookies.token;
+
+  const [lawyerData, setData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    bio: "",
+    gender: "",
+    specialization: "",
+    fees: "",
+    qualifications: [],
+    experiences: [],
+    about: "",
+    organisation: ""
+  });
+
+  useEffect(() => {
+    setData({
+      name: lawyer.name,
+      email: lawyer.email,
+      phone: lawyer.phone,
+      bio: lawyer.bio,
+      gender: lawyer.gender,
+      specialization: lawyer.specialization,
+      fees: lawyer.fees,
+      about: lawyer.about,
+      photo: lawyer.photo,
+      organisation: lawyer.organisation,
+    });
+    setExperienceForms(lawyer.experiences);
+    setQualificationForms(lawyer.qualifications);
+  }, [lawyer]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleQualificationChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedQualificationForms = [...qualificationForms];
+    updatedQualificationForms[index][name] = value;
+    setQualificationForms(updatedQualificationForms);
+  };
+
+  const handleExperienceChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedExperienceForms = [...experienceForms];
+    updatedExperienceForms[index][name] = value;
+    setExperienceForms(updatedExperienceForms);
+  };
 
   const addQualificationForm = () => {
-    setQualificationForms([...qualificationForms, {}]);
+    setQualificationForms([...qualificationForms, { startDate: "", endDate: "", university: "", degree: "" }]);
   };
 
   const deleteQualificationForm = (index) => {
@@ -18,11 +79,8 @@ export default function Profile({ lawyer }) {
     setQualificationForms(updatedForms);
   };
 
-
-  const [experienceForms, setExperienceForms] = useState([]);
-
   const addExperienceForm = () => {
-    setExperienceForms([...experienceForms, {}]);
+    setExperienceForms([...experienceForms, { startDate: "", endDate: "", organisation: "", position: "" }]);
   };
 
   const deleteExperienceForm = (index) => {
@@ -33,11 +91,65 @@ export default function Profile({ lawyer }) {
 
   const handleFileInputChange = async (e) => {
     const file = e.target.files[0];
-    const data = await uploadImgToCloudinary(file);
-    // console.log(data);
-    setPreviewURL(data.url);
-    setSelectedFile(data.url);
-}
+    if (file) {
+      const data = await uploadImgToCloudinary(file);
+      setPreviewURL(data.url);
+      setSelectedFile(data.url);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const experiences = experienceForms
+      .filter((exp) => exp.startDate || exp.endDate || exp.organisation || exp.position)
+      .map((exp) => ({
+        startDate: exp.startDate,
+        endDate: exp.endDate,
+        organisation: exp.organisation,
+        position: exp.position,
+      }));
+
+    const qualifications = qualificationForms
+      .filter((qual) => qual.startDate || qual.endDate || qual.university || qual.degree)
+      .map((qual) => ({
+        startDate: qual.startDate,
+        endDate: qual.endDate,
+        university: qual.university,
+        degree: qual.degree,
+      }));
+
+    const data = {
+      ...lawyerData,
+      experiences,
+      qualifications,
+    };
+
+    try {
+      const response = await fetch(URL + "/lawyer/" + lawyer._id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response && !response.err) {
+        toast.success("Updated Successfully!");
+        setLoading(false);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(
+        `An unexpected error occurred: ${error.message || "Unknown error"}`
+      );
+    }
+  };
+
+
   return (
     <div style={{ maxWidth: '700px' }} className="mx-auto">
       {lawyer.isApproved && (
@@ -50,61 +162,80 @@ export default function Profile({ lawyer }) {
       )}
 
       <h4 className="my-4">Profile Information</h4>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name*
           </label>
-          <input type="text" className="form-control" id="name" />
+          <input type="text" className="form-control" id="name" value={lawyerData.name} name='name'
+            onChange={handleInputChange} />
         </div>
+
         <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">
+          <label htmlFor="exampleInputEmail1" className="form-label" >
             Email address*
           </label>
-          <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+          <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' value={lawyerData.email}
+            onChange={handleInputChange} />
         </div>
+        <div className="mb-3">
+          <label htmlFor="organisation" className="form-label" >
+            Currently working at*
+          </label>
+          <input type="text" className="form-control" id="organisation"  name='organisation' value={lawyerData.organisation} placeholder='Enter the name of the organisation or the address'
+            onChange={handleInputChange} />
+        </div>
+
         <div className="mb-3">
           <label htmlFor="phone" className="form-label">
             Phone*
           </label>
-          <input type="text" className="form-control" id="phone" />
+          <input type="text" className="form-control" id="phone" name='phone' value={lawyerData.phone}
+            onChange={handleInputChange} />
         </div>
+
         <div className="mb-3">
           <label htmlFor="bio" className="form-label">
             Bio*
           </label>
-          <input type="text" className="form-control" id="bio" />
+          <input type="text" className="form-control" id="bio" name='bio' value={lawyerData.bio}
+            onChange={handleInputChange} />
         </div>
+
         <div className="mb-3 row">
           <div className="mb-3 d-flex flex-column col-lg-4 col-md-4">
             <label htmlFor="gender" className="form-label">
               Gender*
             </label>
-            <select name="gender" className="p-2 form-control">
+            <select name="gender" className="p-2 form-control" value={lawyerData.gender} onChange={handleInputChange}>
               <option value="Select">Select</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
           </div>
+
           <div className="mb-3 d-flex flex-column col-lg-4 col-md-4">
             <label htmlFor="specialization" className="form-label">
               Specialization*
             </label>
-            <select name="specialization" className="p-2 form-control">
+            <select name="specialization" className="p-2 form-control" value={lawyerData.specialization} onChange={handleInputChange}>
               <option value="Select">Select</option>
               <option value="Notary">Notary</option>
               <option value="Law Firm">Law Firm</option>
               <option value="lawyer">Lawyer</option>
             </select>
           </div>
+
           <div className="mb-3 d-flex flex-column col-lg-4 col-md-4">
             <label htmlFor="fees" className="form-label">
               Fees*
             </label>
-            <input type="text" className="form-control" id="fees" />
+            <input type="text" className="form-control" id="fees" name='fees' value={lawyerData.fees}
+              onChange={handleInputChange} />
           </div>
         </div>
+
         <div id="qualificationContainer">
           {qualificationForms.map((form, index) => (
             <div key={index} className="mb-3">
@@ -113,13 +244,27 @@ export default function Profile({ lawyer }) {
                   <label htmlFor={`startDate${index}`} className="form-label">
                     Starting Date:
                   </label>
-                  <input type="date" className="form-control" id={`startDate${index}`} name={`startDate${index}`} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    id={`startDate${index}`}
+                    name='startDate'
+                    onChange={(e) => handleQualificationChange(index, e)}
+                    value={form.startDate}
+                  />
                 </div>
                 <div className='d-flex flex-column col-lg-6 col-md-6 mb-3'>
                   <label htmlFor={`endDate${index}`} className="form-label">
                     Ending Date:
                   </label>
-                  <input type="date" className="form-control" id={`endDate${index}`} name={`endDate${index}`} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    id={`endDate${index}`}
+                    name='endDate'
+                    onChange={(e) => handleQualificationChange(index, e)}
+                    value={form.endDate}
+                  />
                 </div>
               </div>
               <div className='row'>
@@ -127,29 +272,41 @@ export default function Profile({ lawyer }) {
                   <label htmlFor={`university${index}`} className="form-label">
                     University:
                   </label>
-                  <input type="text" className="form-control" id={`university${index}`} name={`university${index}`} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`university${index}`}
+                    name='university'
+                    onChange={(e) => handleQualificationChange(index, e)}
+                    value={form.university}
+                  />
                 </div>
                 <div className='d-flex flex-column col-lg-6 col-md-6 mb-3'>
                   <label htmlFor={`degree${index}`} className="form-label">
                     Degree:
                   </label>
-                  <input type="text" className="form-control" id={`degree${index}`} name={`degree${index}`} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`degree${index}`}
+                    name='degree'
+                    onChange={(e) => handleQualificationChange(index, e)}
+                    value={form.degree}
+                  />
                 </div>
               </div>
 
-
-              {/* Delete button */}
               <button type="button" className="btn p-0 mb-3" onClick={() => deleteQualificationForm(index)}>
                 <Icon icon="mdi:delete-circle" width={35} className='mainText' />
               </button>
             </div>
           ))}
+
           <button type="button" className="btn btn-dark mb-4" onClick={addQualificationForm} style={{ fontSize: "14px" }}>
             Add Qualifications
           </button>
-
-
         </div>
+
         <div id="experienceContainer">
           {experienceForms.map((form, index) => (
             <div key={index} className="mb-3">
@@ -158,13 +315,27 @@ export default function Profile({ lawyer }) {
                   <label htmlFor={`startDate${index}`} className="form-label">
                     Starting Date:
                   </label>
-                  <input type="date" className="form-control" id={`startDate${index}`} name={`startDate${index}`} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    id={`startDate${index}`}
+                    name='startDate'
+                    onChange={(e) => handleExperienceChange(index, e)}
+                    value={form.startDate}
+                  />
                 </div>
                 <div className='d-flex flex-column col-lg-6 col-md-6 mb-3'>
                   <label htmlFor={`endDate${index}`} className="form-label">
                     Ending Date:
                   </label>
-                  <input type="date" className="form-control" id={`endDate${index}`} name={`endDate${index}`} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    id={`endDate${index}`}
+                    name='endDate'
+                    onChange={(e) => handleExperienceChange(index, e)}
+                    value={form.endDate}
+                  />
                 </div>
               </div>
               <div className='row'>
@@ -172,23 +343,36 @@ export default function Profile({ lawyer }) {
                   <label htmlFor={`position${index}`} className="form-label">
                     Position:
                   </label>
-                  <input type="text" className="form-control" id={`position${index}`} name={`position${index}`} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`position${index}`}
+                    name='position'
+                    onChange={(e) => handleExperienceChange(index, e)}
+                    value={form.position}
+                  />
                 </div>
                 <div className='d-flex flex-column col-lg-6 col-md-6 mb-3'>
-                  <label htmlFor={`university${index}`} className="form-label">
-                    University:
+                  <label htmlFor={`organisation${index}`} className="form-label">
+                    Organisation:
                   </label>
-                  <input type="text" className="form-control" id={`university${index}`} name={`university${index}`} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`organisation${index}`}
+                    name='organisation'
+                    onChange={(e) => handleExperienceChange(index, e)}
+                    value={form.organisation}
+                  />
                 </div>
               </div>
 
-
-              {/* Delete button */}
               <button type="button" className="btn p-0 mb-3" onClick={() => deleteExperienceForm(index)}>
                 <Icon icon="mdi:delete-circle" width={35} className='mainText' />
               </button>
             </div>
           ))}
+
           <button type="button" className="btn btn-dark mb-4" onClick={addExperienceForm} style={{ fontSize: "14px" }}>
             Add Experience
           </button>
@@ -203,13 +387,17 @@ export default function Profile({ lawyer }) {
             id="message"
             placeholder="Tell something about yourself...."
             className="form-control rounded"
+            name='about'
+            value={lawyerData.about} onChange={handleInputChange}
           />
         </div>
 
         <div className='d-flex align-items-center gap-3 my-4'>
-          {selectedFile && (<div className='rounded-circle border-2 border-primary'>
-            <img src={previewURL} alt='' className='rounded-circle' width={50} />
-          </div>)}
+          {selectedFile && (
+            <div className='rounded-circle border-2 border-primary'>
+              <img src={previewURL} alt='' className='rounded-circle' width={50} />
+            </div>
+          )}
 
           <div>
             <input
@@ -229,11 +417,10 @@ export default function Profile({ lawyer }) {
               Upload Photo
             </label>
           </div>
-
         </div>
 
         <button type="submit" className="btn btn-danger w-100 text-center py-3 mt-3 fs-5">
-          Update Profile
+          {loading ? <HashLoader size={35} color='white' /> : 'Update Profile'}
         </button>
       </form>
     </div>

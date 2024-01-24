@@ -52,7 +52,7 @@ export default function MyServiceReqs() {
 
             {!loading && !error && serviceReqs.length === 0 && (
                 <h2 className="mt-5 text-center text-danger">
-                    You did not request any service yet!
+                    You did not have any service request yet!
                 </h2>
             )}
         </div>

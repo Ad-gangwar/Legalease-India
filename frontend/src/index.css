@@ -78,7 +78,7 @@ code {
 
   .navbar-nav>li>.nav-link {
     width: 100%;
-    text-align: center;
+    justify-content: center;
   }
 
   .d-flex.align-items-center.rounded-pill.bg-white {

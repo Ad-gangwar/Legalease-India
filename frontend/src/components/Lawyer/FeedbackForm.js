@@ -1,15 +1,38 @@
 import React, { useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
+import { makeAuthPostReq } from '../../utils/serverHelper';
+import toast from 'react-hot-toast';
 
-export default function FeedbackForm() {
-  const [reviewText, setReviewText] = useState(0);
+export default function FeedbackForm({ lawyerId }) {
+  const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your form submission logic here
+    try {
+      // Assuming makeAuthPostReq returns a promise
+      const response = await makeAuthPostReq(`/lawyer/${lawyerId}/review/`, {
+        reviewText,
+        rating
+      });
+
+      console.log(response);
+
+      if (response.success) {
+        toast.success(response.message);
+        window.location.reload();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(
+        `An unexpected error occurred: ${error.message || "Unknown error"}`
+      );
+    }
   };
+
 
   return (
     <form className='mb-5'>
@@ -24,11 +47,10 @@ export default function FeedbackForm() {
               <button
                 key={index}
                 type='button'
-                className={`${
-                  starValue <= (hover || rating)
-                    ? 'text-warning'
-                    : 'text-secondary'
-                } bg-transparent border-0 cursor-pointer`}
+                className={`${starValue <= (hover || rating)
+                  ? 'text-warning'
+                  : 'text-secondary'
+                  } bg-transparent border-0 cursor-pointer`}
                 onClick={() => setRating(starValue)}
                 onMouseEnter={() => setHover(starValue)}
                 onMouseLeave={() => setHover(0)}

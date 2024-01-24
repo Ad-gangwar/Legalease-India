@@ -2,40 +2,49 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout/Layout'
 import { useParams } from 'react-router-dom';
-import { lawyersData } from '../../assets/data/lawyers';
 import starIcon from '../../assets/images/Star.png';
 import AboutLawyer from './AboutLawyer';
 import Feedback from './Feedback';
 import { useCookies } from 'react-cookie';
 import lawyerContext from '../context/LawyerContext';
-
+import { makeUnauthGetReq } from '../../utils/serverHelper';
 
 export default function LawyerDetails() {
   const navigate = useNavigate();
   const { lawyerId } = useParams();
-  const [lawyer, setData] = useState({});
+  const [lawyer, setLawyer] = useState(null);
   const [tab, setTab] = useState('about');
   const { selectedLawyer, setSelectedLawyer } = useContext(lawyerContext);
   const [cookies] = useCookies(["docName"])
   const docName = cookies.docName;
 
   useEffect(() => {
-    function fetchData() {
-      const myLawyer = lawyersData.find(lawyer => lawyer.id === lawyerId);
-      if (myLawyer) {
-        setData(myLawyer);
+    const getLawyer = async () => {
+      try {
+        const response = await makeUnauthGetReq("/lawyer/" + lawyerId);
+        // console.log(response.data);
+        if (response.success) {
+          await setLawyer(response.data);
+        }
+      } catch (error) {    
+        console.error("Error:", error);
       }
-    }
-
-    fetchData();
-  }, [lawyerId]);
-
+    };
+    getLawyer();
+  }, [lawyerId]); 
+  
 
   const handleSelectLawyer = async () => {
     // Set the selected lawyer in the context
     await setSelectedLawyer(lawyer);
     navigate("/DocumentServices/" + docName);
   };
+
+  // console.log(lawyer);
+
+  if(lawyer===null){
+    return <div>Loading</div>
+  }
 
   return (
     <Layout>
@@ -45,9 +54,9 @@ export default function LawyerDetails() {
             <div className='col-md-8'>
               <div className='container-fluid'>
                 <div className='row'>
-                  <div className='col-lg-3 col-md-3 my-2'>
-                    <figure className='d-flex align-items-center h-100 w-100 mx-auto' style={{ maxWidth: "220px" }}>
-                      <img src={lawyer.photo} alt='' className='w-100 rounded-top' />
+                  <div className='col-lg-3 col-md-3 px-0'>
+                    <figure className='d-flex align-items-center  w-100 mx-auto' style={{ maxWidth: "220px" }}>
+                      <img src={lawyer.photo} alt='' className='w-100  rounded-top' />
                     </figure>
                   </div>
 
@@ -58,6 +67,9 @@ export default function LawyerDetails() {
                     <h3 className='iconText mt-3 myText'>
                       {lawyer.name}
                     </h3>
+                    <h6 className='mt-2'>
+                      Contact No.  <span className='iconText text-success'>{lawyer.phone}</span>
+                    </h6>
                     <div className='d-flex align-items-center gap-1 my-2'>
                       <span className='d-flex align-items-center gap-1 my-bold'>
                         <img src={starIcon} alt='' />
@@ -68,8 +80,9 @@ export default function LawyerDetails() {
                       </span>
                     </div>
                     <p>
-                      Experienced {lawyer.specialization} delivering top-notch legal representation.
+                      {lawyer.bio ? lawyer.bio : `Experienced ${lawyer.specialization} delivering top-notch legal representation.`}
                     </p>
+
                   </div>
                 </div>
               </div>
@@ -87,7 +100,7 @@ export default function LawyerDetails() {
 
               <div className='mt-3'>
                 {tab === 'about' && <AboutLawyer lawyer={lawyer} />}
-                {tab === 'feedback' && <Feedback />}
+                {tab === 'feedback' && <Feedback lawyer={lawyer}/>}
               </div>
             </div>
 
@@ -96,7 +109,7 @@ export default function LawyerDetails() {
                 <div className='d-flex justify-content-between'>
                   <p className='mt-0'>Service Charges</p>
                   <span className='my-bold'>
-                    Rs. 100 /-
+                    {`Rs. ${lawyer.fees}/-`}
                   </span>
                 </div>
                 <div className='d-flex justify-content-between'>

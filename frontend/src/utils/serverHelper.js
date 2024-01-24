@@ -16,6 +16,20 @@ export const makeUnauthPostReq = async (route, body) => {
     return formattedResponse;
 }
 
+export const makeUnauthGetReq = async (route, body) => {
+    // Send a GET request to the specified URL with JSON-formatted body
+    const response = await fetch(URL + route, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    
+    // Parse and return the JSON response
+    const formattedResponse = await response.json();
+    return formattedResponse;
+}
+
 // Function to make an authenticated POST request to a specified route with a given body
 export const makeAuthPostReq = async (route, body) => {
     // Retrieve the authentication token

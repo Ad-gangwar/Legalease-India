@@ -34,10 +34,10 @@ const lawyerCard = ({ lawyer }) => {
                         +{lawyer.casesHandled} cases
                     </h5>
                     <p className=''>
-                        At {lawyer.lawFirm}
+                        At {lawyer.organisation}
                     </p>
                 </div>
-                <Link to={"/lawyer/" + lawyer.id} className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
+                <Link to={"/lawyer/" + lawyer._id} className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
                     <BsArrowRight className='arrow mx-0'/>
                 </Link>
             </div>

@@ -34,6 +34,7 @@ export default function Login() {
                 navigate("/");
             } else {
                 toast.error("Enter valid Credentials!");
+                setLoading(false);
             }
         } catch (error) {
             setLoading(false);

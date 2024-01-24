@@ -17,7 +17,7 @@ const getAllReviews=async(req, res)=>{
 }
 
 const createReview = async (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     if (!req.body.lawyer) req.body.lawyer = req.params.lawyerId;
     if (!req.body.user) req.body.user = req.user._id;
 
@@ -25,7 +25,7 @@ const createReview = async (req, res) => {
 
     try {
         const savedReview = await newReview.save(); // Use await here
-        console.log(savedReview); // Log savedReview._doc instead of savedReview
+        // console.log(savedReview); // Log savedReview._doc instead of savedReview
         await Lawyer.findByIdAndUpdate(req.body.lawyer, {
             $push: { reviews: savedReview._id }
         });

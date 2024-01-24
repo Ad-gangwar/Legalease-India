@@ -1,5 +1,7 @@
 import React from 'react'
 import Layout from './Layout/Layout'
+import toast from 'react-hot-toast';
+
 export default function Contact() {
   return (
     <Layout>
@@ -42,7 +44,9 @@ export default function Contact() {
               className="form-control rounded"
             />
           </div>
-          <button type="submit" className="btn btn-danger rounded">Submit</button>
+          <button type="submit" className="btn btn-danger rounded" onClick={()=>{
+            toast.success('Email sent successfully!');
+          }}>Submit</button>
         </form>
       </div>
     </Layout>

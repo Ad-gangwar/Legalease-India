@@ -19,6 +19,10 @@ export default function Signup() {
     const [role, setRole] = useState("user");
     const [gender, setGender] = useState("");
     const [loading, setLoading] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [show, setShow] = useState(false);
+    const [verified, setVerified] = useState(false);
+    const [enteredOTP, setEnteredOTP] = useState("");
 
     const handleFileInputChange = async (e) => {
         const file = e.target.files[0];
@@ -28,9 +32,56 @@ export default function Signup() {
         setSelectedFile(data.url);
     }
 
+    const handleOtp = async () => {
+        try {
+            const response = await makeUnauthPostReq("/auth/generateOTP", { email });
+            if (!response.success) {
+                toast.error(response.message);
+            }
+            else {
+                toast.success(response.message);
+                setOtp(response.data.otp);
+            }
+        }
+        catch (error) {
+            console.error("Error:", error);
+            alert(`An unexpected error occurred: ${error.message || "Unknown error"}`);
+        }
+    }
+
+    const handleOtpInputChange = (e) => {
+        // Handle changes in the OTP input field if needed
+        setEnteredOTP(e.target.value);
+    };
+
+
+    const handleOtpFormSubmit = async (e) => {
+        e.preventDefault();
+        // Add logic for OTP verification here if needed
+        try {
+            const response = await makeUnauthPostReq("/auth/verifyOTP", { email, enteredOTP });
+            if (!response.success) {
+                toast.error(response.message);
+            }
+            else {
+                toast.success(response.message);
+                setVerified(true);
+            }
+        }
+        catch (error) {
+            console.error("Error:", error);
+            alert(`An unexpected error occurred: ${error.message || "Unknown error"}`);
+        }
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        if (!otp && !verified) {
+            setLoading(false);
+            return toast.error("Verify the OTP first!");
+        }
         const data = { email, name, password, role, gender, photo: selectedFile };
         console.log(data);
         try {
@@ -125,7 +176,42 @@ export default function Signup() {
                                     </div>
 
                                 </div>
-                                <div className='mt-5'>
+                                <div className='mt-4'>
+                                    {!show && (
+                                        <button
+                                            className='btn btn-secondary'
+                                            onClick={() => {
+                                                setShow(true);
+                                                handleOtp();
+                                            }}
+                                        >
+                                            Generate OTP
+                                        </button>
+                                    )}
+                                    {show && (
+                                        <section>
+                                            <p className='my-bold'>Please enter the OTP sent to your email ID</p>
+                                            <div className='d-flex mb-5'>
+                                                <form onSubmit={handleOtpFormSubmit} className='d-flex w-100'>
+                                                    <label htmlFor='otpInput' className='visually-hidden'>
+                                                        Enter your OTP
+                                                    </label>
+                                                    <input
+                                                        id='otpInput'
+                                                        className='form-control me-3'
+                                                        placeholder='Enter your OTP'
+                                                        onChange={handleOtpInputChange}
+                                                    />
+                                                    <button type='button' className='btn btn-secondary my-bold' onClick={handleOtpFormSubmit}>
+                                                        Verify OTP
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </section>
+                                    )}
+                                </div>
+
+                                <div className='mt-4'>
                                     <button type='submit' className='w-100 btn btn-danger btn-lg rounded p-3' disabled={loading}>
                                         {loading ? <HashLoader size={35} color='white' /> : 'Sign Up'}
                                     </button>

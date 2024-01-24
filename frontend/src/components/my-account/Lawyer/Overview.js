@@ -5,10 +5,10 @@ import AboutLawyer from '../../Lawyer/AboutLawyer'
 export default function Overview({ lawyer }) {
     return (
         <div className='container-fluid'>
-            <div>
-                <div className='col-lg-3 col-md-3 my-2'>
+            <div className='row'>
+                <div className='col-lg-3 col-md-3'>
                     <figure className='d-flex align-items-center h-100 w-100 mx-auto' style={{ maxWidth: "220px" }}>
-                        <img src={lawyer.photo} alt='' className='w-100 rounded-top' />
+                        <img src={lawyer.photo!== null? lawyer.photo: 'https://cdn.vectorstock.com/i/1000x1000/50/45/advocacy-icon-male-user-person-profile-avatar-vector-20905045.webp'} alt='' className='w-100 rounded-top' />
                     </figure>
                 </div>
 
@@ -19,6 +19,7 @@ export default function Overview({ lawyer }) {
                     <h3 className='iconText mt-3 myText'>
                         {lawyer.name}
                     </h3>
+
                     <div className='d-flex align-items-center gap-1 my-2'>
                         <span className='d-flex align-items-center gap-1 my-bold'>
                             <img src={starIcon} alt='' />

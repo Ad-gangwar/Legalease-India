@@ -58,6 +58,7 @@ export default function Profile({ user }) {
         }
     };
 
+
     return (
         <div className="container my-5 pe-4">
             <form onSubmit={handleSubmit}>

@@ -49,10 +49,11 @@ ReviewSchema.statics.calcAvgRatings = async function (lawyerId) {
   ]);
 
   if (stats.length > 0) {
-    // console.log(stats);
+    const roundedAvgRating = stats[0].avgRating.toFixed(1);
+
     await Lawyer.findByIdAndUpdate(lawyerId, {
       totalReviews: stats[0].numOfRating,
-      rating: stats[0].avgRating,
+      rating: roundedAvgRating, // Round off the average rating to one decimal place
     });
   } else {
     // Handle the case where there are no reviews for the Lawyer
@@ -61,9 +62,9 @@ ReviewSchema.statics.calcAvgRatings = async function (lawyerId) {
   }
 };
 
-
 ReviewSchema.post("save", function () {
   this.constructor.calcAvgRatings(this.lawyer);
-})
+});
+
 
 module.exports= mongoose.model("Review", ReviewSchema);

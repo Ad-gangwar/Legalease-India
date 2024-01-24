@@ -70,6 +70,13 @@ export default function DocumentService() {
             {selectedDocument ? (<div className='container'>
                 {/* ---------------------needed document section----------------------------- */}
                 <section className='my-5 mb-3'>
+                    <div className='d-flex gap-3 align-items-center mb-4'>
+                        <span><h4>Select a Lawyer to continue: </h4></span>
+                        <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/lawyers')}>
+                            {loading ? <HashLoader size={35} color='white' /> : 'Select Lawyer'}
+                        </button>
+                        {selectedLawyer && <h5 className='my-bold'>{selectedLawyer.name}</h5>}
+                    </div>
                     <h2 className='text-center iconText myText'>Needed Documents</h2>
                     <div className='w-100 mx-auto row row-cols-lg-2 row-cols-md-1'>
                         {selectedDocument.map((item, index) => (
@@ -111,12 +118,6 @@ export default function DocumentService() {
                         ))}
                     </ul>
                 </section>
-                <div className='d-flex gap-3 align-items-center'>
-                <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/lawyers')}>
-                {loading ? <HashLoader size={35} color='white'/> : 'Select Lawyer'}
-                </button>
-                {selectedLawyer && <h5 className='my-bold'>{selectedLawyer.name}</h5>}
-                </div>
                 <button className='btn btn-danger rounded-pill mx-auto d-block mt-4 mb-5 p-3 fs-5 my-bold px-5' onClick={handleSubmit}>Request Service</button>
             </div>) : <div>Document Details not found!</div>}
         </Layout>

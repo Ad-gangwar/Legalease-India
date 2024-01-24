@@ -20,7 +20,14 @@ export default function App() {
   const [selectedLawyer, setSelectedLawyer] = useState(null);
   return (
     <div className='h-100 w-100'>
-      <Toaster />
+      <Toaster toastOptions={{
+        className: 'bg-dark',
+        style: {
+          border: '1px solid #713200',
+          padding: '16px',
+          color: 'white',
+        },
+      }} />
       <BrowserRouter>
         <lawyerContext.Provider value={{ selectedLawyer, setSelectedLawyer }}>
           <Routes>
