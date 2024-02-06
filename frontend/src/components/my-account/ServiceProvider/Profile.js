@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie';
 import HashLoader from 'react-spinners/HashLoader';
 import { URL } from '../../../utils/config';
 
-export default function Profile({ lawyer }) {
+export default function Profile({ serviceProvider }) {
   const [qualificationForms, setQualificationForms] = useState([]);
   const [experienceForms, setExperienceForms] = useState([]);
   const [selectedFile, setSelectedFile] = useState("");
@@ -16,12 +16,13 @@ export default function Profile({ lawyer }) {
   const [cookies] = useCookies(["token"]);
   const token = cookies.token;
 
-  const [lawyerData, setData] = useState({
+  const [serviceProviderData, setData] = useState({
     name: "",
     email: "",
     phone: "",
     bio: "",
     gender: "",
+    address: "",
     specialization: "",
     fees: "",
     qualifications: [],
@@ -32,20 +33,21 @@ export default function Profile({ lawyer }) {
 
   useEffect(() => {
     setData({
-      name: lawyer.name,
-      email: lawyer.email,
-      phone: lawyer.phone,
-      bio: lawyer.bio,
-      gender: lawyer.gender,
-      specialization: lawyer.specialization,
-      fees: lawyer.fees,
-      about: lawyer.about,
-      photo: lawyer.photo,
-      organisation: lawyer.organisation,
+      name: serviceProvider.name,
+      email: serviceProvider.email,
+      phone: serviceProvider.phone,
+      address: serviceProvider.address,
+      bio: serviceProvider.bio,
+      gender: serviceProvider.gender,
+      specialization: serviceProvider.specialization,
+      fees: serviceProvider.fees,
+      about: serviceProvider.about,
+      photo: serviceProvider.photo,
+      organisation: serviceProvider.organisation,
     });
-    setExperienceForms(lawyer.experiences);
-    setQualificationForms(lawyer.qualifications);
-  }, [lawyer]);
+    setExperienceForms(serviceProvider.experiences);
+    setQualificationForms(serviceProvider.qualifications);
+  }, [serviceProvider]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -121,13 +123,13 @@ export default function Profile({ lawyer }) {
       }));
 
     const data = {
-      ...lawyerData,
+      ...serviceProviderData,
       experiences,
       qualifications,
     };
 
     try {
-      const response = await fetch(URL + "/lawyer/" + lawyer._id, {
+      const response = await fetch(URL + "/serviceProvider/" + serviceProvider._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +154,7 @@ export default function Profile({ lawyer }) {
 
   return (
     <div style={{ maxWidth: '700px' }} className="mx-auto">
-      {!lawyer.isApproved && (
+      {serviceProvider.isApproved==='pending' && (
         <p className="p-2 rounded bg-warning bg-opacity-25" style={{ color: 'brown' }}>
           <span className="mx-1">
             <FiAlertCircle />
@@ -167,7 +169,7 @@ export default function Profile({ lawyer }) {
           <label htmlFor="name" className="form-label">
             Name*
           </label>
-          <input type="text" className="form-control" id="name" value={lawyerData.name} name='name'
+          <input type="text" className="form-control" id="name" value={serviceProviderData.name} name='name'
             onChange={handleInputChange} />
         </div>
 
@@ -175,14 +177,23 @@ export default function Profile({ lawyer }) {
           <label htmlFor="exampleInputEmail1" className="form-label" >
             Email address*
           </label>
-          <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' value={lawyerData.email}
+          <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' value={serviceProviderData.email}
             onChange={handleInputChange} />
         </div>
+
+        <div className="mb-3">
+          <label htmlFor="address" className="form-label">
+            Address*
+          </label>
+          <input type="text" className="form-control" id="address" value={serviceProviderData.address} name='address'
+            onChange={handleInputChange} />
+        </div>
+
         <div className="mb-3">
           <label htmlFor="organisation" className="form-label" >
             Currently working at*
           </label>
-          <input type="text" className="form-control" id="organisation"  name='organisation' value={lawyerData.organisation} placeholder='Enter the name of the organisation or the address'
+          <input type="text" className="form-control" id="organisation"  name='organisation' value={serviceProviderData.organisation} placeholder='Enter the name of the organisation or the address'
             onChange={handleInputChange} />
         </div>
 
@@ -190,7 +201,7 @@ export default function Profile({ lawyer }) {
           <label htmlFor="phone" className="form-label">
             Phone*
           </label>
-          <input type="text" className="form-control" id="phone" name='phone' value={lawyerData.phone}
+          <input type="text" className="form-control" id="phone" name='phone' value={serviceProviderData.phone}
             onChange={handleInputChange} />
         </div>
 
@@ -198,7 +209,7 @@ export default function Profile({ lawyer }) {
           <label htmlFor="bio" className="form-label">
             Bio*
           </label>
-          <input type="text" className="form-control" id="bio" name='bio' value={lawyerData.bio}
+          <input type="text" className="form-control" id="bio" name='bio' value={serviceProviderData.bio}
             onChange={handleInputChange} />
         </div>
 
@@ -207,7 +218,7 @@ export default function Profile({ lawyer }) {
             <label htmlFor="gender" className="form-label">
               Gender*
             </label>
-            <select name="gender" className="p-2 form-control" value={lawyerData.gender} onChange={handleInputChange}>
+            <select name="gender" className="p-2 form-control" value={serviceProviderData.gender} onChange={handleInputChange}>
               <option value="Select">Select</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -219,11 +230,11 @@ export default function Profile({ lawyer }) {
             <label htmlFor="specialization" className="form-label">
               Specialization*
             </label>
-            <select name="specialization" className="p-2 form-control" value={lawyerData.specialization} onChange={handleInputChange}>
+            <select name="specialization" className="p-2 form-control" value={serviceProviderData.specialization} onChange={handleInputChange}>
               <option value="Select">Select</option>
               <option value="Notary">Notary</option>
               <option value="Law Firm">Law Firm</option>
-              <option value="lawyer">Lawyer</option>
+              <option value="serviceProvider">Lawyer</option>
             </select>
           </div>
 
@@ -231,7 +242,7 @@ export default function Profile({ lawyer }) {
             <label htmlFor="fees" className="form-label">
               Fees*
             </label>
-            <input type="text" className="form-control" id="fees" name='fees' value={lawyerData.fees}
+            <input type="text" className="form-control" id="fees" name='fees' value={serviceProviderData.fees}
               onChange={handleInputChange} />
           </div>
         </div>
@@ -388,7 +399,7 @@ export default function Profile({ lawyer }) {
             placeholder="Tell something about yourself...."
             className="form-control rounded"
             name='about'
-            value={lawyerData.about} onChange={handleInputChange}
+            value={serviceProviderData.about} onChange={handleInputChange}
           />
         </div>
 

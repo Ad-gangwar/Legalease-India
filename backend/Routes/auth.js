@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/UserSchema');
-const Lawyer = require('../models/LawyerSchema');
+const Client = require('../models/ClientSchema');
+const ServiceProvider = require('../models/ServiceProviderSchema');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const { getToken } = require('../utils/helpers');
@@ -14,7 +14,11 @@ const otpGenerator = require("otp-generator");
 router.post("/generateOTP", async (req, res) => {
     try {
         const { email } = req.body;
-        const checkUserPresent = await User.findOne({ email });
+        const [client, serviceProvider] = await Promise.all([
+            Client.findOne({ email }),
+            ServiceProvider.findOne({ email }),
+        ]);
+        const checkUserPresent = client || serviceProvider;
 
         if (checkUserPresent) {
             return res.status(401).json({
@@ -47,7 +51,7 @@ router.post("/generateOTP", async (req, res) => {
 
         //create an entry in db for otp
         const otpBody = await OTP.create(otpPayLoad);
-        console.log(otpBody);
+        // console.log(otpBody);
 
         //return response successfully
         res.status(200).json({
@@ -88,11 +92,12 @@ router.post("/verifyOTP", async (req, res) => {
 
 router.post('/register', async (req, res) => {
     // Extracting user details from the request body
-    const { email, password, name, role, photo, gender } = req.body;
+    const { email, password, name, role, photo, gender, address} = req.body;
     // console.log(otp);
+    // console.log(email, password, name, role, photo, gender, address);
     try {
         // Check if user with the same email already exists
-        const existingUser = role === 'user' ? await User.findOne({ email }) : await Lawyer.findOne({ email });
+        const existingUser = role === 'client' ? await Client.findOne({ email }) : await ServiceProvider.findOne({ email });
 
         if (existingUser) {
             return res.status(403).json({ error: "A user with this email already exists" });
@@ -103,10 +108,10 @@ router.post('/register', async (req, res) => {
 
         // Create a new user based on the role
         let user;
-        if (role === 'user') {
-            user = new User({ name, email, password: hashPass, gender, role, photo });
-        } else if (role === 'lawyer') {
-            user = new Lawyer({ name, email, password: hashPass, gender, role, photo });
+        if (role === 'client') {
+            user = new Client({ name, email, password: hashPass, gender, role, photo , address});
+        } else if (role === 'serviceProvider') {
+            user = new ServiceProvider({ name, email, password: hashPass, gender, role, photo , address});
         }
         // console.log(user);
         // Save the user to the database
@@ -140,13 +145,13 @@ router.post('/login', [
     try {
         let email = req.body.email;
         let userData = null;
-        const user = await User.findOne({ email });
-        const lawyer = await Lawyer.findOne({ email });
-        if (user) {
-            userData = user;
+        const client = await Client.findOne({ email });
+        const serviceProvider = await ServiceProvider.findOne({ email });
+        if (client) {
+            userData = client;
         }
-        else if (lawyer) {
-            userData = lawyer;
+        else if (serviceProvider) {
+            userData = serviceProvider;
         }
 
         if (!userData) {

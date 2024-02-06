@@ -7,17 +7,44 @@ import Error from '../../Error/Error';
 import Layout from '../../Layout/Layout';
 import ServiceReqs from './ServiceReqs';
 import Overview from './Overview';
+import { URL } from '../../../utils/config';
+import toast from 'react-hot-toast';
 
 export default function MyAccount() {
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'user']);
   const [tab, setTab] = useState('overview');
-  const { data: userData, loading, error } =userGetProfile('/lawyer/profile/me');
-
+  const { data: userData, loading, error } = userGetProfile('/serviceProvider/profile/me');
+//  console.log(userData)
   const handleLogout = () => {
     removeCookie('token');
     removeCookie('user');
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(URL + "/user/" + userData._id, {
+        method: 'DELETE', // Specify the HTTP method
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+
+      const responseData = await response.json();
+
+      // Check the response data for success
+      if (responseData.success) {
+        handleLogout();
+        toast.success("Account Deleted Successfully!");
+      } else {
+        toast.error("Account Deletion Failed 😒");
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(`An unexpected error occurred: ${error.message || "Unknown error"}`);
+    }
+  };
 
   return (
     <Layout>
@@ -27,7 +54,7 @@ export default function MyAccount() {
           {error && !loading && <Error errMessage={error} />}
           {!loading && !error && (
             <div className="row">
-              <div className="col-md-4 pb-4 shadow-lg mx-auto mb-4" style={{ maxWidth: "22rem", maxHeight: "30rem"}}>
+              <div className="col-md-4 pb-4 shadow-lg mx-auto mb-4" style={{ maxWidth: "22rem", maxHeight: "30rem" }}>
                 <div className="mt-5 container">
                   <section className='my-5 text-center my-bold cursor-pointer d-flex flex-column'>
                     <button onClick={() => setTab('overview')} className={`btn ${tab === 'overview' ? 'btn-info' : 'btn'} me-2 py-3`}>
@@ -45,15 +72,15 @@ export default function MyAccount() {
                     <button className="w-100 btn btn-dark btn-lg rounded" onClick={handleLogout}>
                       Logout
                     </button>
-                    <button className="w-100 btn btn-danger btn-lg rounded mt-3">
+                    <button className="w-100 btn btn-danger btn-lg rounded mt-3" onClick={handleDelete}>
                       Delete Account
                     </button>
                   </section>
                 </div>
               </div>
               <div className='col-md-8'>
-                {tab === 'overview' && <Overview lawyer={userData} />}
-                {tab === 'profile' && <Profile lawyer={userData} />}
+                {tab === 'overview' && <Overview serviceProvider={userData} />}
+                {tab === 'profile' && <Profile serviceProvider={userData} />}
                 {tab === 'requests' && <ServiceReqs />}
               </div>
             </div>

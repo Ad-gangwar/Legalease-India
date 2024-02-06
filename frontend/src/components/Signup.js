@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Input from './shared/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from './Layout/Layout';
-import signupImg from '../assets/images/signup-img.gif';
-import avatar from '../assets/images/avatar-icon.png';
+import signupImg from '../assets/images/signup-male.jpg';
+import signupImg2 from '../assets/images/signup-female.jpg';
 import toast from 'react-hot-toast';
 import uploadImgToCloudinary from '../utils/Cloudinary_Upload';
 import { makeUnauthPostReq } from '../utils/serverHelper';
@@ -15,8 +15,9 @@ export default function Signup() {
     const [previewURL, setPreviewURL] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("user");
+    const [role, setRole] = useState("client");
     const [gender, setGender] = useState("");
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState("");
@@ -82,8 +83,7 @@ export default function Signup() {
             setLoading(false);
             return toast.error("Verify the OTP first!");
         }
-        const data = { email, name, password, role, gender, photo: selectedFile };
-        console.log(data);
+        const data = { email, name, password, role, gender, photo: selectedFile, address };
         try {
             const response = await makeUnauthPostReq('/auth/register', data);
 
@@ -116,9 +116,11 @@ export default function Signup() {
                 <div style={{ maxWidth: "1170px" }} className='mx-auto w-100'>
                     <div className='row'>
                         {/* Login image */}
-                        <div className='col-lg-6  rounded signup-img'>
-                            <figure>
-                                <img src={signupImg} alt='' className='w-100 rounded' ></img>
+                        <div className='col-lg-6 rounded signup-img d-flex align-items-center'>
+                            <figure className='container'>
+                                {gender === 'female' ? <img src={signupImg2} alt='' className='w-100 rounded' ></img> :
+                                    <img src={signupImg} alt='' className='w-100 rounded' ></img>
+                                }
                             </figure>
                         </div>
 
@@ -130,13 +132,14 @@ export default function Signup() {
                                     <Input type='text' placeholder='Full Name' name='name' value={name} setValue={setName} required />
                                     <Input type='email' placeholder='Enter your email' name='email' value={email} setValue={setEmail} required />
                                     <Input type='password' placeholder='Enter your password' name='password' value={password} setValue={setPassword} required />
+                                    <Input type='text' placeholder='Enter your Address' name='address' value={address} setValue={setAddress} required />
                                 </div>
                                 <div className='d-flex justify-content-between align-items-center mx-0' style={{ margin: "2.3rem" }}>
                                     <label className='my-bold'>
                                         Are you a:
                                         <select name='role' className='mx-2 border-0' value={role} onChange={(e) => setRole(e.target.value)}>
-                                            <option value='user'>User</option>
-                                            <option value='lawyer'>Lawyer</option>
+                                            <option value='client'>Client</option>
+                                            <option value='serviceProvider'>Service Provider</option>
                                         </select>
                                     </label>
 
@@ -150,33 +153,31 @@ export default function Signup() {
                                         </select>
                                     </label>
                                 </div>
+                                <div className='d-flex justify-content-between'>
+                                    <div className='d-flex align-items-center gap-3'>
+                                        {selectedFile && (<div className='rounded-circle border-2 border-primary'>
+                                            <img src={previewURL} alt='' className='rounded-circle' width={50} />
+                                        </div>)}
 
-                                <div className='d-flex align-items-center gap-3'>
-                                    {selectedFile && (<div className='rounded-circle border-2 border-primary'>
-                                        <img src={previewURL} alt='' className='rounded-circle' width={50} />
-                                    </div>)}
-
-                                    <div>
-                                        <input
-                                            type='file'
-                                            name='photo'
-                                            id='customFile'
-                                            onChange={handleFileInputChange}
-                                            accept='.jpg, .png'
-                                            className='cursor-pointer h-100'
-                                            style={{ display: 'none' }}
-                                        />
-                                        <label
-                                            htmlFor='customFile'
-                                            className='my-bold rounded cursor-pointer sbg'
-                                            style={{ display: 'inline-block', padding: '7px 11px', border: '1px solid #ccc', borderRadius: '5px' }}
-                                        >
-                                            Upload Photo
-                                        </label>
+                                        <div>
+                                            <input
+                                                type='file'
+                                                name='photo'
+                                                id='customFile'
+                                                onChange={handleFileInputChange}
+                                                accept='.jpg, .png'
+                                                className='cursor-pointer h-100'
+                                                style={{ display: 'none' }}
+                                            />
+                                            <label
+                                                htmlFor='customFile'
+                                                className='my-bold rounded cursor-pointer sbg'
+                                                style={{ display: 'inline-block', padding: '7px 11px', border: '1px solid #ccc', borderRadius: '5px' }}
+                                            >
+                                                Upload Photo
+                                            </label>
+                                        </div>
                                     </div>
-
-                                </div>
-                                <div className='mt-4'>
                                     {!show && (
                                         <button
                                             className='btn btn-secondary'
@@ -188,6 +189,10 @@ export default function Signup() {
                                             Generate OTP
                                         </button>
                                     )}
+
+
+                                </div>
+                                <div className='mt-4'>
                                     {show && (
                                         <section>
                                             <p className='my-bold'>Please enter the OTP sent to your email ID</p>

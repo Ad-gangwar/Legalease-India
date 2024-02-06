@@ -6,14 +6,14 @@ const ServiceSchema = new mongoose.Schema(
       type: String,
       required:true
     },
-    lawyer: {
+    serviceProvider: {
       type: mongoose.Types.ObjectId,
-      ref: "Lawyer",
+      ref: "ServiceProvider",
       required: true,
     },
-    user: {
+    client: {
       type: mongoose.Types.ObjectId,
-      ref: "User",
+      ref: "Client",
       required: true,
     },
     documents:{

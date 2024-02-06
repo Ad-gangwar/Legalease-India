@@ -1,7 +1,7 @@
 const mongoose=require('mongoose');
 const Service = require("./ServiceSchema");
 
-const LawyerSchema = new mongoose.Schema({
+const ServiceProviderSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -18,6 +18,9 @@ const LawyerSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: ["male", "female", "other"]
+  },
+  address: {
+    type: String
   },
   photo: { 
     type: String 
@@ -84,7 +87,7 @@ const LawyerSchema = new mongoose.Schema({
 });
 
 // Method to update casesHandled based on approved service requests
-LawyerSchema.methods.updateCasesHandled = async function () {
+ServiceProviderSchema.methods.updateCasesHandled = async function () {
   try {
     const approvedRequestsCount = await Service.countDocuments({
       _id: { $in: this.ServiceReq },
@@ -95,7 +98,7 @@ LawyerSchema.methods.updateCasesHandled = async function () {
     this.casesHandled = approvedRequestsCount;
     await this.save();
 
-    console.log(`Cases handled for lawyer ${this.name} updated to ${approvedRequestsCount}`);
+    console.log(`Cases handled for service provider ${this.name} updated to ${approvedRequestsCount}`);
   } catch (error) {
     console.error('Error updating casesHandled:', error);
     throw error;
@@ -103,4 +106,4 @@ LawyerSchema.methods.updateCasesHandled = async function () {
 };
 
 
-module.exports= mongoose.model("Lawyer", LawyerSchema);
+module.exports= mongoose.model("ServiceProvider", ServiceProviderSchema);

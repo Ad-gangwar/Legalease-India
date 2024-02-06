@@ -6,18 +6,18 @@ import Home from './components/Home';
 import About from './components/About';
 import Services from './components/Services';
 import Contact from './components/Contact';
-import Lawyers from './components/Lawyer/Lawyers';
-import LawyerDetails from './components/Lawyer/LawyerDetails';
+import ServiceProviders from './components/ServiceProvider/ServiceProviders';
+import ServiceProviderDetails from './components/ServiceProvider/ServiceProviderDetails';
 import SubServices from './components/SubServices';
 import DocumentService from './components/DocService';
-import toast, { Toaster } from 'react-hot-toast';
-import MyAccount from './components/my-account/User/MyAccount';
-import Dashboard from './components/my-account/Lawyer/Dashboard';
-import lawyerContext from './components/context/LawyerContext';
+import { Toaster } from 'react-hot-toast';
+import MyAccount from './components/my-account/Client/MyAccount';
+import Dashboard from './components/my-account/ServiceProvider/Dashboard';
+import serviceProviderContext from './components/context/ServiceProviderContext';
 import ProtectedRoutes from './ProtectedRoutes';
 
 export default function App() {
-  const [selectedLawyer, setSelectedLawyer] = useState(null);
+  const [selectedServiceProvider, setSelectedServiceProvider] = useState(null);
   return (
     <div className='h-100 w-100'>
       <Toaster toastOptions={{
@@ -29,7 +29,7 @@ export default function App() {
         },
       }} />
       <BrowserRouter>
-        <lawyerContext.Provider value={{ selectedLawyer, setSelectedLawyer }}>
+        <serviceProviderContext.Provider value={{ selectedServiceProvider, setSelectedServiceProvider }}>
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login />}></Route>
@@ -39,12 +39,12 @@ export default function App() {
             <Route path='/subServices' element={<SubServices />}></Route>
             <Route path='/DocumentServices/:name' element={<DocumentService />}></Route>
             <Route path='/contact' element={<Contact />}></Route>
-            <Route path='lawyer/:lawyerId' element={<LawyerDetails />}></Route>
-            <Route path='/lawyers' element={<Lawyers />}></Route>
-            <Route path='/users/profile/me' element={<ProtectedRoutes allowedRoles={['user']}><MyAccount /></ProtectedRoutes>}></Route>
-            <Route path='/lawyers/profile/me' element={<ProtectedRoutes allowedRoles={['lawyer']}><Dashboard /></ProtectedRoutes>}></Route>
+            <Route path='serviceProvider/:serviceProviderId' element={<ServiceProviderDetails />}></Route>
+            <Route path='/serviceProviders' element={<ServiceProviders />}></Route>
+            <Route path='/clients/profile/me' element={<ProtectedRoutes allowedRoles={['client']}><MyAccount /></ProtectedRoutes>}></Route>
+            <Route path='/serviceProviders/profile/me' element={<ProtectedRoutes allowedRoles={['serviceProvider']}><Dashboard /></ProtectedRoutes>}></Route>
           </Routes>
-        </lawyerContext.Provider>
+        </serviceProviderContext.Provider>
       </BrowserRouter>
     </div>
   );

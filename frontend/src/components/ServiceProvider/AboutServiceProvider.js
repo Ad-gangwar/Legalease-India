@@ -1,8 +1,8 @@
 import React from 'react'
 import formatDate from '../../utils/formatDate';
 
-export default function AboutLawyer({ lawyer }) {
-  if (lawyer.length === 0) {
+export default function AboutServiceProvider({ serviceProvider }) {
+  if (serviceProvider.length === 0) {
     return <div>Loading</div>
   }
 
@@ -12,11 +12,11 @@ export default function AboutLawyer({ lawyer }) {
         <h5>
           About
           <span className='fs-4 mx-2 myText'>
-            {lawyer.name}
+            {serviceProvider.name}
           </span>
         </h5>
         <p>
-          {lawyer.about}
+          {serviceProvider.about}
         </p>
       </div>
 
@@ -25,7 +25,7 @@ export default function AboutLawyer({ lawyer }) {
           Education
         </h5>
         <ul className='list-unstyled mt-3 row gap-3 container'>
-          {lawyer.qualifications.map((qual, index) => (
+          {serviceProvider.qualifications.map((qual, index) => (
             <li className='col-md-4 col-sm-6 col-xs-12 p-3 shadow rounded' key={index}>
               <div className='text-danger mb-2'>
                 {formatDate(qual.startDate)} - {formatDate(qual.endDate)}
@@ -44,7 +44,7 @@ export default function AboutLawyer({ lawyer }) {
           Experience
         </h5>
         <ul className='list-unstyled row mt-4 row'>
-          {lawyer.experiences.map((exp, index) => (
+          {serviceProvider.experiences.map((exp, index) => (
             <li className='col-md-4 col-sm-6 col-xs-12 my-2' key={index}>
               <div className='rounded p-3' style={{ backgroundColor: "#fff9ea" }}>
                 <span style={{ color: "#FEB60D" }}>

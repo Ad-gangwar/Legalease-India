@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {makeAuthGetReq} from '../utils/serverHelper';
 
 const UserFetchData=(url)=> {
+    // console.log(url)
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -15,6 +16,7 @@ const UserFetchData=(url)=> {
                 if(!response.success){
                     throw new Error(response.message + "😒");
                 }
+                // console.log(response)
                 setData(response.data);
                 setLoading(false);
             }

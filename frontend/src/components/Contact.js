@@ -44,7 +44,7 @@ export default function Contact() {
               className="form-control rounded"
             />
           </div>
-          <button type="submit" className="btn btn-danger rounded" onClick={()=>{
+          <button type="submit" className="btn btn-danger rounded-pill p-3 px-4" onClick={()=>{
             toast.success('Email sent successfully!');
           }}>Submit</button>
         </form>

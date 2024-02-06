@@ -3,7 +3,7 @@ import { AiFillStar } from 'react-icons/ai';
 import { makeAuthPostReq } from '../../utils/serverHelper';
 import toast from 'react-hot-toast';
 
-export default function FeedbackForm({ lawyerId }) {
+export default function FeedbackForm({ serviceProviderId }) {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -12,7 +12,7 @@ export default function FeedbackForm({ lawyerId }) {
     e.preventDefault();
     try {
       // Assuming makeAuthPostReq returns a promise
-      const response = await makeAuthPostReq(`/lawyer/${lawyerId}/review/`, {
+      const response = await makeAuthPostReq(`/serviceProvider/${serviceProviderId}/review/`, {
         reviewText,
         rating
       });

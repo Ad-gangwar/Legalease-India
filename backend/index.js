@@ -10,12 +10,12 @@ const cors = require('cors');
 const SECRET = process.env.SECRET;
 const URL = process.env.URL;
 // Importing the User model and authentication routes
-const User = require('./models/UserSchema');
-const Lawyer = require('./models/LawyerSchema');
+const Client = require('./models/ClientSchema');
+const ServiceProvider = require('./models/ServiceProviderSchema');
 
 const authRoutes = require('./Routes/auth');
-const userRoutes = require('./Routes/user');
-const lawyerRoutes = require('./Routes/lawyer');
+const clientRoutes = require('./Routes/client');
+const serviceProviderRoutes = require('./Routes/serviceProvider');
 const reviewRoutes = require('./Routes/review');
 
 // Creating an Express application
@@ -35,8 +35,8 @@ app.get("/", (req, res) => {
 
 // Setting up routes for authentication
 app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
-app.use('/lawyer', lawyerRoutes);
+app.use('/client', clientRoutes);
+app.use('/serviceProvider', serviceProviderRoutes);
 app.use('/review', reviewRoutes);
 
 // Connecting to the MongoDB database
@@ -60,11 +60,11 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
 
     try {
         let user;
-        if (jwt_payload.role === 'user') {
+        if (jwt_payload.role === 'client') {
             // console.log(jwt_payload.identifier)
-            user = await User.findById(jwt_payload.identifier);
-        } else if (jwt_payload.role === 'lawyer') {
-            user = await Lawyer.findById(jwt_payload.identifier);
+            user = await Client.findById(jwt_payload.identifier);
+        } else if (jwt_payload.role === 'serviceProvider') {
+            user = await ServiceProvider.findById(jwt_payload.identifier);
         }
 
         if (user) {

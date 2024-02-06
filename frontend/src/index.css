@@ -15,7 +15,6 @@ code {
 }
 
 .top-box {
-  height: 1.6rem;
   font-size: 0.9rem;
   border-bottom: 2px solid #9a1919;
   background-color: #ede8e8;
@@ -27,11 +26,10 @@ code {
     padding-top: 0;
   }
 
-  .top-box {
-    height: 3rem;
-  }
-
   .top-box>ul>li {
+    padding: 0px !important;
+  }
+  .top-box{
     padding: 0px !important;
   }
 }
@@ -52,6 +50,11 @@ code {
 
 .mybg {
   background-color: #9a1919;
+}
+
+.signup-img{
+  background-color: #08bce0;
+  text-align: center;
 }
 
 @media (max-width: 996px) {
@@ -130,7 +133,7 @@ code {
 }
 
 .sbg{
-  background-color: #eadad9 !important;
+  background-color: #f1e2e0c2 !important;
 }
 
 .tab-btn{
@@ -158,5 +161,54 @@ code {
 }
 
 .pulse:hover{
-  animation: pulse 2s infinite; /* Adjust the duration as needed */
+  animation: pulse 2s infinite;
 }
+
+@keyframes scrollY{
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.scrollY {
+  animation: scrollY 12s linear infinite;
+}
+
+.scrollY:hover {
+  animation-play-state: paused;
+}
+
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 100% !important;
+  background: rgb(214, 212, 212) !important;
+}
+
+.swiper-pagination-bullet-active{
+  background: #9a1919 !important;
+  border: none !important;
+}
+
+.swiper{
+  padding-bottom: 70px !important;
+}
+
+.swiper-slide.swiper-slide-next{
+  background: #c32929 !important;
+  border-radius: 12px;
+  box-shadow: 0px 15px 70px #d98181 !important;
+}
+.swiper-slide.swiper-slide-next h4,
+.swiper-slide.swiper-slide-next p{
+  color: #fff !important;
+}
+
+.swiper-pagination{
+  top: 90% !important;
+}
+
+

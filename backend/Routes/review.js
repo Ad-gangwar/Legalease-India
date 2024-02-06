@@ -2,7 +2,7 @@ const express=require('express');
 const passport=require('passport');
 const router = express.Router({mergeParams: true});
 const Review=require('../models/ReviewSchema');
-const Lawyer=require('../models/LawyerSchema');
+const ServiceProvider=require('../models/ServiceProviderSchema');
 const { restrict } =  require( '../utils/helpers');
 
 const getAllReviews=async(req, res)=>{
@@ -18,15 +18,15 @@ const getAllReviews=async(req, res)=>{
 
 const createReview = async (req, res) => {
     // console.log(req.user);
-    if (!req.body.lawyer) req.body.lawyer = req.params.lawyerId;
-    if (!req.body.user) req.body.user = req.user._id;
+    if (!req.body.serviceProvider) req.body.serviceProvider = req.params.serviceProviderId;
+    if (!req.body.user) req.body.client = req.user._id;
 
     const newReview = new Review(req.body);
 
     try {
         const savedReview = await newReview.save(); // Use await here
         // console.log(savedReview); // Log savedReview._doc instead of savedReview
-        await Lawyer.findByIdAndUpdate(req.body.lawyer, {
+        await ServiceProvider.findByIdAndUpdate(req.body.serviceProvider, {
             $push: { reviews: savedReview._id }
         });
 
@@ -38,5 +38,5 @@ const createReview = async (req, res) => {
 
 
 router.get('/', getAllReviews);
-router.post('/', passport.authenticate("jwt", {session: false}), restrict(["user"]), createReview);
+router.post('/', passport.authenticate("jwt", {session: false}), restrict(["client"]), createReview);
 module.exports=router;

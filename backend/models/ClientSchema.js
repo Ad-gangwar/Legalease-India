@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const ClientSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  address: {
+    type: String
+  },
   photo: { 
     type: String 
   },
@@ -22,8 +25,8 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "lawyer"],
-    default: "user",
+    enum: ["client", "serviceProvider"],
+    default: "client",
   },
   gender: {
     type: String,
@@ -34,4 +37,4 @@ const UserSchema = new mongoose.Schema({
   }],
 });
 
-module.exports=mongoose.model("User", UserSchema);
+module.exports=mongoose.model("Client", ClientSchema);

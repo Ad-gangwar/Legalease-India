@@ -1,15 +1,15 @@
-const mongoose=require('mongoose');
-const Lawyer=require('./LawyerSchema');
+const mongoose = require('mongoose');
+const ServiceProvider = require('./ServiceProviderSchema');
 
 const ReviewSchema = new mongoose.Schema(
   {
-    lawyer: {
+    serviceProvider: {
       type: mongoose.Types.ObjectId,
-      ref: "Lawyer",
+      ref: "ServiceProvider",
     },
-    user: {
+    client: {
       type: mongoose.Types.ObjectId,
-      ref: "User",
+      ref: "Client",
     },
     reviewText: {
       type: String,
@@ -28,20 +28,20 @@ const ReviewSchema = new mongoose.Schema(
 
 ReviewSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "user",
+    path: "client",
     select: "name photo"
   });
   next();
 });
 
-ReviewSchema.statics.calcAvgRatings = async function (lawyerId) {
+ReviewSchema.statics.calcAvgRatings = async function (serviceProviderId) {
   const stats = await this.aggregate([
     {
-      $match: { lawyer: lawyerId },
+      $match: { serviceProvider: serviceProviderId },
     },
     {
       $group: {
-        _id: "$lawyer",
+        _id: "$serviceProvider",
         numOfRating: { $sum: 1 },
         avgRating: { $avg: "$rating" },
       },
@@ -49,22 +49,21 @@ ReviewSchema.statics.calcAvgRatings = async function (lawyerId) {
   ]);
 
   if (stats.length > 0) {
-    const roundedAvgRating = stats[0].avgRating.toFixed(1);
+    const roundedAvgRating = parseFloat(stats[0].avgRating.toFixed(1)); // Convert to number
 
-    await Lawyer.findByIdAndUpdate(lawyerId, {
+    await ServiceProvider.findByIdAndUpdate(serviceProviderId, {
       totalReviews: stats[0].numOfRating,
-      rating: roundedAvgRating, // Round off the average rating to one decimal place
+      rating: roundedAvgRating,
     });
   } else {
-    // Handle the case where there are no reviews for the Lawyer
-    // You may want to update Lawyer with default values or handle it accordingly
-    console.log("No reviews found for the Lawyer.");
+    console.log("No reviews found for the Service Provider.");
   }
 };
 
+
 ReviewSchema.post("save", function () {
-  this.constructor.calcAvgRatings(this.lawyer);
+  this.constructor.calcAvgRatings(this.serviceProvider);
 });
 
 
-module.exports= mongoose.model("Review", ReviewSchema);
+module.exports = mongoose.model("Review", ReviewSchema);

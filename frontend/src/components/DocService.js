@@ -6,7 +6,7 @@ import Documents from '../assets/data/Documents';
 import CloudinaryUpload from '../utils/Cloudinary_Upload';
 import { makeAuthPostReq } from '../utils/serverHelper';
 import { useCookies } from 'react-cookie';
-import lawyerContext from './context/LawyerContext';
+import serviceProviderContext from './context/ServiceProviderContext';
 import formatDate from '../utils/formatDate';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
@@ -19,9 +19,10 @@ export default function DocumentService() {
     const [selectedDocumentPoints, setSelectedDocumentPoints] = useState([]);
     const [cookie, setCookie] = useCookies(["docName"]);
     setCookie("docName", name, { path: "/" });
-    const { selectedLawyer, setSelectedLawyer } = useContext(lawyerContext);
+    const { selectedServiceProvider, setSelectedServiceProvider } = useContext(serviceProviderContext);
     const date = new Date();
     const [loading, setLoading] = useState(false);
+    const maxSizeInBytes = 250 * 1024;
 
     const fetchData = () => {
         const document = Documents[name];
@@ -32,22 +33,40 @@ export default function DocumentService() {
 
     useEffect(() => {
         fetchData();
-    }, []); // Add an empty dependency array to run this effect only once after the initial render
+    }, []);
 
     const handleFileInputChange = async (e) => {
         const file = e.target.files[0];
-        const data = await CloudinaryUpload(file);
-        setDocs((prevDocs) => [...prevDocs, data.url]);
+
+        // Check if a file is selected
+        if (file) {
+            // Check if the selected file exceeds the max size
+            if (file.size > maxSizeInBytes) {
+                toast.error('File size exceeds the maximum allowed size (250 KB). Please choose a smaller file.');
+                // Optionally, you can reset the input value to clear the selected file
+                e.target.value = null;
+            } else {
+                // File is within the allowed size limit, proceed with Cloudinary upload
+                try {
+                    const data = await CloudinaryUpload(file);
+                    setDocs((prevDocs) => [...prevDocs, data.url]);
+                } catch (error) {
+                    console.error('Error uploading file to Cloudinary:', error);
+                    // Handle the error, e.g., display an alert to the user
+                }
+            }
+        }
     };
 
     const handleSubmit = async () => {
         setLoading(true);
         try {
+            console.log(name.replace(/[^A-Za-z0-9]/g, ' '));
             // console.log(docs);
-            const response = await makeAuthPostReq("/user/makeServiceReq", {
-                serviceName: name,
-                lawyer: selectedLawyer.id,
-                fees: selectedLawyer.fees ? selectedLawyer.fees : "500",
+            const response = await makeAuthPostReq("/client/makeServiceReq", {
+                serviceName: name.replace(/[^A-Za-z0-9]/g, ' '),
+                serviceProvider: selectedServiceProvider._id,
+                fees: selectedServiceProvider.fees ? selectedServiceProvider.fees : "500",
                 documents: docs,
                 serviceDate: formatDate(date),
             });
@@ -72,11 +91,11 @@ export default function DocumentService() {
                 {/* ---------------------needed document section----------------------------- */}
                 <section className='my-5 mb-3'>
                     <div className='d-flex gap-3 align-items-center mb-4'>
-                        <span><h4>Select a Lawyer to continue: </h4></span>
-                        <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/lawyers')}>
-                            {loading ? <HashLoader size={35} color='white' /> : 'Select Lawyer'}
+                        <span><h4>Select a Service Provider to continue: </h4></span>
+                        <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/serviceProviders')}>
+                            {loading ? <HashLoader size={35} color='white' /> : 'Select Service Provider'}
                         </button>
-                        {selectedLawyer && <h5 className='my-bold'>{selectedLawyer.name}</h5>}
+                        {selectedServiceProvider && <h5 className='my-bold'>{selectedServiceProvider.name}</h5>}
                     </div>
                     <h2 className='text-center iconText myText'>Needed Documents</h2>
                     <div className='w-100 mx-auto row row-cols-lg-2 row-cols-md-1'>
@@ -92,14 +111,14 @@ export default function DocumentService() {
                                         ))}
                                     </ul>
                                     <div>
-                                        <span>Provide any of the above document</span>
+                                        <span>Provide any of the above document of less than 250 KB size</span>
                                         <div className='mt-3'>
                                             <input
                                                 type='file'
                                                 name='photo'
                                                 id='customFile'
                                                 onChange={handleFileInputChange}
-                                                accept='.jpg, .png'
+                                                accept='.jpg, .png, .pdf'
                                                 className='cursor-pointer h-100 w-100'
                                             />
                                         </div>

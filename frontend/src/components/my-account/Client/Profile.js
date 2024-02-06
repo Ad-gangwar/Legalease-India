@@ -11,6 +11,7 @@ export default function Profile({ user }) {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
     const [gender, setGender] = useState("");
     const [loading, setLoading] = useState(false);
     const [photo, setPhoto] = useState(null);
@@ -28,15 +29,16 @@ export default function Profile({ user }) {
         setName(user.name);
         setGender(user.gender);
         setPhoto(user.photo);
+        setAddress(user.address)
     }, [user])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const data = { email, name, gender, photo };
-
+        const data = { email, name, gender, photo, address};
+        // console.log(photo);
         try {
-            const response = await fetch(URL + "/user/" + user._id, {
+            const response = await fetch(URL + "/client/" + user._id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -65,6 +67,7 @@ export default function Profile({ user }) {
                 <div className="mb-5 mt-10">
                     <Input type='text' placeholder='Full Name' name='name' value={name} setValue={setName} required />
                     <Input type='email' placeholder='Enter your email' name='email' value={email} setValue={setEmail} required />
+                    <Input type='text' placeholder='Enter your Address' name='address' value={address} setValue={setAddress} required />
                 </div>
                 <div className='d-flex justify-content-between align-items-center mx-0' style={{ margin: "2.3rem" }}>
                     <label className='my-bold'>

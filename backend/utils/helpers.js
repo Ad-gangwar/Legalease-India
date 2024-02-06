@@ -1,5 +1,5 @@
-const User = require('../models/UserSchema');
-const Lawyer = require('../models/LawyerSchema');
+const Client = require('../models/ClientSchema');
+const ServiceProvider = require('../models/ServiceProviderSchema');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -8,10 +8,10 @@ const SECRET = process.env.SECRET;
 // Creating an exports object for modularization
 exports = {};
 
-// Async function to generate a JWT token for a given user
+// Async function to generate a JWT token for a given client
 exports.getToken = async (email, user) => {
     // Sign the JWT with the user's identifier, role, and the secret key
-    // console.log(user.id);
+    // console.log(client.id);
     const token = jwt.sign({ identifier: user.id, role: user.role }, SECRET);
 
     // Return the generated token
@@ -19,19 +19,19 @@ exports.getToken = async (email, user) => {
 };
 
 exports.restrict = roles => async (req, res, next) => {
-    // console.log(req.user._id);
+    // console.log(req.client._id);
     const userId = req.user._id;
 
     let userData;
 
-    const user = await User.findById(userId);
-    const lawyer = await Lawyer.findById(userId);
+    const client = await Client.findById(userId);
+    const serviceProvider = await ServiceProvider.findById(userId);
 
-    if (user) {
-        userData = user;
+    if (client) {
+        userData = client;
     }
-    if (lawyer) {
-        userData = lawyer;
+    if (serviceProvider) {
+        userData = serviceProvider;
     }
 
     // console.log(userData);
