@@ -1,5 +1,5 @@
 const Documents = {
-  PANCard: [
+  PanCard: [
     {
       category: "Proof of Identity",
       documents: [
@@ -37,7 +37,7 @@ const Documents = {
     },
   ],
   
-  PANCardPoints: [
+  PanCardPoints: [
     "Photograph requirement waived for individuals below 18.",
     "Address on the application must match the proof of address.",
     "Sign within the designated space matching supporting documents.",

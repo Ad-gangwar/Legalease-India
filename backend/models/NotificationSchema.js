@@ -7,7 +7,7 @@ const NotificationSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ['User', 'Lawyer'],
+        enum: ['Client', 'ServiceProvider'],
         required: true,
     },
     notificationText: {

@@ -98,6 +98,7 @@ const getMyServiceReqs = async(req, res)=>{
 
 const makeServiceReq = async (req, res) => {
     const { serviceName, serviceProvider, documents, fees, serviceDate } = req.body;
+    // console.log(serviceName)
     const clientId = req.user._id;
 
     try {

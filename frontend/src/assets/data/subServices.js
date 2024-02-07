@@ -1,6 +1,6 @@
 export const documentServices = [
     {
-      name: "PAN Card",
+      name: "Pan Card",
       description: ''
     },
     {
@@ -12,7 +12,7 @@ export const documentServices = [
       description: ''
     },
     {
-      name: "Voter ID Card",
+      name: "Voter Id Card",
       description: ''
     },
     {

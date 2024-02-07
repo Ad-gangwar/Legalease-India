@@ -10,6 +10,7 @@ import serviceProviderContext from './context/ServiceProviderContext';
 import formatDate from '../utils/formatDate';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
+import { makeUnauthPostReq } from '../utils/serverHelper';
 
 export default function DocumentService() {
     const { name } = useParams();
@@ -18,11 +19,16 @@ export default function DocumentService() {
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentPoints, setSelectedDocumentPoints] = useState([]);
     const [cookie, setCookie] = useCookies(["docName"]);
-    setCookie("docName", name, { path: "/" });
+    const [cookies] = useCookies(["user"]);
     const { selectedServiceProvider, setSelectedServiceProvider } = useContext(serviceProviderContext);
     const date = new Date();
     const [loading, setLoading] = useState(false);
     const maxSizeInBytes = 250 * 1024;
+
+    useEffect(() => {
+        setCookie("docName", name, { path: "/" });
+    }, [name, setCookie]);
+    
 
     const fetchData = () => {
         const document = Documents[name];
@@ -58,13 +64,29 @@ export default function DocumentService() {
         }
     };
 
+    const handleServiceRequest=async()=>{
+        try{
+            const response=await makeUnauthPostReq("/notification/create", {
+                user: selectedServiceProvider._id,
+                userType: "ServiceProvider",
+                notificationText: `You had received a request for the ${name.replace(/([A-Z])/g, ' $1')} from ${cookies.user.name}`
+            })
+            if(response.success){
+                console.log("Notification sent");
+            }
+        }
+        catch(error){
+            console.log("Error", error);
+        }
+    }
+
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            console.log(name.replace(/[^A-Za-z0-9]/g, ' '));
+            // console.log(name.replace(/([A-Z])/g, ' $1'));
             // console.log(docs);
             const response = await makeAuthPostReq("/client/makeServiceReq", {
-                serviceName: name.replace(/[^A-Za-z0-9]/g, ' '),
+                serviceName: name.replace(/([A-Z])/g, ' $1'),
                 serviceProvider: selectedServiceProvider._id,
                 fees: selectedServiceProvider.fees ? selectedServiceProvider.fees : "500",
                 documents: docs,
@@ -73,6 +95,7 @@ export default function DocumentService() {
 
             if (response.success) {
                 // You can redirect to a success page or perform any other actions
+                handleServiceRequest();
                 toast.success("Service request successful!");
             } else {
                 toast.error(response.message);

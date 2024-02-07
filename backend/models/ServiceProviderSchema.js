@@ -90,8 +90,8 @@ const ServiceProviderSchema = new mongoose.Schema({
 ServiceProviderSchema.methods.updateCasesHandled = async function () {
   try {
     const approvedRequestsCount = await Service.countDocuments({
-      _id: { $in: this.ServiceReq },
-      status: 'approved', // Assuming you have a 'status' field in your ServiceSchema
+      serviceProvider: this._id, // Match the current service provider
+      status: 'approved',
     });
 
     // Update the casesHandled field
@@ -104,6 +104,5 @@ ServiceProviderSchema.methods.updateCasesHandled = async function () {
     throw error;
   }
 };
-
 
 module.exports= mongoose.model("ServiceProvider", ServiceProviderSchema);

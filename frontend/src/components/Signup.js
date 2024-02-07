@@ -79,10 +79,10 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (!otp && !verified) {
-            setLoading(false);
-            return toast.error("Verify the OTP first!");
-        }
+        // if (!otp && !verified) {
+        //     setLoading(false);
+        //     return toast.error("Verify the OTP first!");
+        // }
         const data = { email, name, password, role, gender, photo: selectedFile, address };
         try {
             const response = await makeUnauthPostReq('/auth/register', data);

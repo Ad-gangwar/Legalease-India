@@ -24,7 +24,7 @@ export default function Reviews() {
     fetchReviews();
   }, []);
 
-  console.log(reviews);
+  // console.log(reviews);
   return (
     <div className='my-5'>
       <Swiper modules={[Pagination]} spaceBetween={30} slidesPerView={1} pagination={{ clickable: true }} breakpoints={{

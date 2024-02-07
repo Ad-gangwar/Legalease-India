@@ -105,7 +105,7 @@ export default function Footer() {
                                 <li key={index} className='mb-3 list-style-none'>
                                     <Link
                                         to={item.path}
-                                        className='nav-link text-white'
+                                        className='text-white text-decoration-none'
                                     >
                                         {item.display}
                                     </Link>
@@ -121,7 +121,7 @@ export default function Footer() {
                                 <li key={index} className='mb-3'>
                                     <Link
                                         to={item.path}
-                                        className='text-white nav-link'
+                                        className='text-white text-decoration-none'
                                     >
                                         {item.display}
                                     </Link>
@@ -137,7 +137,7 @@ export default function Footer() {
                                 <li key={index} className='mb-3'>
                                     <Link
                                         to={item.path}
-                                        className='text-white nav-link'
+                                        className='text-white text-decoration-none'
                                     >
                                         {item.display}
                                     </Link>

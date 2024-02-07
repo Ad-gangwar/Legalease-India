@@ -18,9 +18,9 @@ export default function MyServiceReqs() {
             {!loading && !error && (
                 <div className="row row-cols-1 row-cols-lg-2">
                     {serviceReqs.map((service, index) => (
-                        <div className='px-3'>
-                            <div key={index} className={`col mb-4 p-3 border border-2 rounded pulse ${service.status === 'pending' ? 'border-danger' : 'border-success'}`}>
-                                <h5 className='mb-3 mybg p-2 text-white px-3 rounded-end'>{service.serviceName}</h5>
+                        <div className='px-3' key={index}>
+                            <div className={`col mb-4 p-3 border border-2 rounded pulse ${service.status === 'pending' ? 'border-danger' : 'border-success'}`}>
+                                <h5 className={`${service.status==='pending'? 'mybg' : 'bg-success'} mb-3  p-2 text-white px-3 rounded-end`}>{service.serviceName}</h5>
                                 <h6 className='mb-3'>Service Request Date: <span className='my-bold text-success fw-bold'>{formatDate(service.serviceDate)}</span></h6>
                                 <h6 className='mb-2'>My Documents:</h6>
                                 <div className='row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mb-3'>

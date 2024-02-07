@@ -30,17 +30,18 @@ export default function Login() {
                 setCookie("token", token, { path: "/", expires: date });
                 setCookie("user", response.data, { path: "/" });
                 toast.success("Logged in Successfully!");
-                setLoading(false);
                 navigate("/");
             } else {
                 toast.error("Enter valid Credentials!");
-                setLoading(false);
             }
         } catch (error) {
-            setLoading(false);
             console.error("Error:", error);
+            toast.error("An error occurred. Please try again later.");
+        } finally {
+            setLoading(false); // Set loading state to false regardless of success or error
         }
     };
+
 
 
     return (
@@ -56,7 +57,7 @@ export default function Login() {
                         <Input type='password' placeholder='Enter your password' value={password} setValue={setPassword} />
                         <div className='mt-4'>
                             <button type='submit' className='w-100 btn btn-danger rounded px-4 py-2 my-bold fs-4 mt-4' onClick={handleSubmit}>
-                            {loading ? <HashLoader size={35} color='white' /> : 'Login'}
+                                {loading ? <HashLoader size={35} color='white' /> : 'Login'}
                             </button>
                         </div>
                         <p className='mt-4 text-center'>

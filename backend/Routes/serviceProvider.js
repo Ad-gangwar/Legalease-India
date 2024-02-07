@@ -25,6 +25,21 @@ const deleteServiceProvider = async (req, res) => {
     }
 };
 
+const deleteServiceReq = async (req, res) => {
+    const id = req.body.id;
+    try {
+        // Assuming Service is your Mongoose model
+        const deletedServiceReq = await Service.findByIdAndDelete(id);
+        if (!deletedServiceReq) {
+            return res.status(404).json({ success: false, message: 'Service request not found.' });
+        }
+        res.status(200).json({ success: true, message: 'Service request successfully deleted', data: deletedServiceReq });
+    } catch (err) {
+        console.error("Error deleting service request:", err);
+        res.status(500).json({ success: false, message: 'Failed to delete service request. An error occurred.' });
+    }
+};
+
 const getSingleServiceProvider = async (req, res) => {
     const id = req.params.id;
     try {
@@ -91,6 +106,31 @@ const getServiceProviderProfile = async(req, res)=>{
     }
 };
 
+const approveReq = async (req, res) => {
+    const id = req.body.id;
+    try {
+        // Update the status of the service request to 'approved' and retrieve the updated document
+        const updated = await Service.findByIdAndUpdate(id, { $set: { status: 'approved' }}, { new: true });
+        if (!updated) {
+            return res.status(404).json({ success: false, message: 'Request not found.' });
+        }
+
+        // Retrieve the associated service provider
+        const serviceProviderId = updated.serviceProvider;
+        const serviceProvider = await ServiceProvider.findById(serviceProviderId);
+
+        // Call the updateCasesHandled method on the service provider to update casesHandled
+        await serviceProvider.updateCasesHandled();
+
+        res.status(200).json({ success: true, message: "Request successfully approved." });
+    } catch (err) {
+        console.error("Error approving request:", err);
+        res.status(500).json({ success: false, message: 'Request not approved. An error occurred.' });
+    }
+}
+
+
+
 const router = express.Router();
 
 router.use('/:serviceProviderId/review', reviewRouter);
@@ -98,6 +138,8 @@ router.get('/:id', getSingleServiceProvider);
 router.get('/',  getAllServiceProviders);
 router.put('/:id',  passport.authenticate("jwt", {session: false}), restrict(["serviceProvider"]), updateServiceProvider); 
 router.delete('/:id',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  deleteServiceProvider);
+router.post('/cancel',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  deleteServiceReq);
+router.post('/approve',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  approveReq);
 router.get('/profile/me',passport.authenticate("jwt", { session: false }), restrict(["serviceProvider"]),  getServiceProviderProfile);
 router.get('/ServiceReqs/my-ServiceReqs',passport.authenticate("jwt", { session: false }), restrict(["serviceProvider"]),  getMyServiceReqs); 
 module.exports= router;

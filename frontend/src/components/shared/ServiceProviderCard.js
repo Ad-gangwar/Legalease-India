@@ -7,7 +7,7 @@ const serviceProviderCard = ({ serviceProvider }) => {
     return (
         <div className='px-2'>
             <div>
-                <img src={serviceProvider.photo} className="w-100 rounded-top" alt={serviceProvider.name} />
+                <img src={serviceProvider.photo} className="w-100 rounded-top" alt={serviceProvider.name} style={{maxHeight: "290px"}}/>
             </div>
             <h5 className='my-2 mt-3 iconText myText'>
                 {serviceProvider.name}

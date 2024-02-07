@@ -1,24 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import digitalIndia from '../../assets/images/digital-india.png';
 import { useCookies } from "react-cookie";
-
+import Bell from '../../assets/images/bell.gif';
+import Bell2 from '../../assets/images/bell2.gif';
 export default function Navbar() {
-    const [cookies, setCookie, removeCookie] = useCookies(["token", "user"]);
+    const [cookies] = useCookies(["token", "user"]);
     const token = cookies.token;
     const user = cookies.user;
     let navigate = useNavigate();
 
+     // State to track hover status
+     const [isHovered, setIsHovered] = useState(false);
 
-    const handleLogout = async () => {
-        removeCookie('token');
-        removeCookie('user');
-        navigate('/login');
-        window.location.reload();
-    };
-    
+     // Function to handle hover
+     const handleHover = () => {
+         setIsHovered(!isHovered);
+     };
+
     return (
         <div className='iconText'>
             <div className='d-flex flex-row justify-content-end container-fluid align-items-center px-3 top-box'>
@@ -72,10 +73,24 @@ export default function Navbar() {
                                         </Link>}
                                     </li>
                                     {!token && (<li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to='/login'>
+                                        <Link className='nav-link hoverBox d-flex h-100 align-items-center px-3' aria-current='page' to='/login'>
                                             Login
                                         </Link>
                                     </li>)}
+
+                                    {token && (<li className='nav-item border border-dark border-1 border-top-0 '>
+                                        <Link className='nav-link hoverBox d-flex h-100 align-items-center px-2' aria-current='page' to='/notifications'>
+                                            <img
+                                                src={isHovered ? Bell : Bell2}
+                                                style={{ maxWidth: "33px" }}
+                                                className='h-100'
+                                                onMouseEnter={handleHover}
+                                                onMouseLeave={handleHover}
+                                                alt="Bell"
+                                            />
+                                        </Link>
+                                    </li>)}
+
                                     <li className='nav-item border border-dark border-1 border-top-0'>
                                         <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' aria-current='page' to='/services'>
                                             Services
@@ -101,11 +116,6 @@ export default function Navbar() {
                                             Help
                                         </Link>
                                     </li>
-                                    {token && (<li className='nav-item border border-dark border-1 border-top-0'>
-                                        <button className='nav-link hoverBox h-100 d-flex align-items-center px-3' onClick={handleLogout}>
-                                            Logout
-                                        </button>
-                                    </li>)}
                                 </ul>
                             </div>
                         </div>

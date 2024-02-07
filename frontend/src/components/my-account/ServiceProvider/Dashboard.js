@@ -14,10 +14,14 @@ export default function MyAccount() {
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'user']);
   const [tab, setTab] = useState('overview');
   const { data: userData, loading, error } = userGetProfile('/serviceProvider/profile/me');
-//  console.log(userData)
+  //  console.log(userData)
+
   const handleLogout = () => {
-    removeCookie('token');
-    removeCookie('user');
+    // Update state after the component has finished rendering
+    setTimeout(() => {
+      removeCookie('token');
+      removeCookie('user');
+    }, 0);
   };
 
   const handleDelete = async () => {
@@ -56,14 +60,14 @@ export default function MyAccount() {
             <div className="row">
               <div className="col-md-4 pb-4 shadow-lg mx-auto mb-4" style={{ maxWidth: "22rem", maxHeight: "30rem" }}>
                 <div className="mt-5 container">
-                  <section className='my-5 text-center my-bold cursor-pointer d-flex flex-column'>
-                    <button onClick={() => setTab('overview')} className={`btn ${tab === 'overview' ? 'btn-info' : 'btn'} me-2 py-3`}>
+                  <section className='my-5 text-center cursor-pointer d-flex flex-column'>
+                    <button onClick={() => setTab('overview')} className={`btn my-bold ${tab === 'overview' ? 'btn-info' : 'btn'} me-2 py-3`}>
                       Overview
                     </button>
-                    <button onClick={() => setTab('requests')} className={`btn ${tab === 'requests' ? 'btn-info' : 'btn'} me-2 py-3`}>
+                    <button onClick={() => setTab('requests')} className={`btn my-bold ${tab === 'requests' ? 'btn-info' : 'btn'} me-2 py-3`}>
                       Service Requests
                     </button>
-                    <button onClick={() => setTab('profile')} className={`btn ${tab === 'profile' ? 'btn-info' : 'btn'} me-2 py-3`}>
+                    <button onClick={() => setTab('profile')} className={`btn my-bold ${tab === 'profile' ? 'btn-info' : 'btn'} me-2 py-3`}>
                       Profile
                     </button>
                   </section>

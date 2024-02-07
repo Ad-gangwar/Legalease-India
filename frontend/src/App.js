@@ -15,6 +15,7 @@ import MyAccount from './components/my-account/Client/MyAccount';
 import Dashboard from './components/my-account/ServiceProvider/Dashboard';
 import serviceProviderContext from './components/context/ServiceProviderContext';
 import ProtectedRoutes from './ProtectedRoutes';
+import Notifications from './components/shared/Notifications';
 
 export default function App() {
   const [selectedServiceProvider, setSelectedServiceProvider] = useState(null);
@@ -39,6 +40,7 @@ export default function App() {
             <Route path='/subServices' element={<SubServices />}></Route>
             <Route path='/DocumentServices/:name' element={<DocumentService />}></Route>
             <Route path='/contact' element={<Contact />}></Route>
+            <Route path='/notifications' element={<Notifications />}></Route>
             <Route path='serviceProvider/:serviceProviderId' element={<ServiceProviderDetails />}></Route>
             <Route path='/serviceProviders' element={<ServiceProviders />}></Route>
             <Route path='/clients/profile/me' element={<ProtectedRoutes allowedRoles={['client']}><MyAccount /></ProtectedRoutes>}></Route>

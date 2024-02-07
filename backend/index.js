@@ -17,6 +17,7 @@ const authRoutes = require('./Routes/auth');
 const clientRoutes = require('./Routes/client');
 const serviceProviderRoutes = require('./Routes/serviceProvider');
 const reviewRoutes = require('./Routes/review');
+const notificationRoutes = require('./Routes/notification');
 
 // Creating an Express application
 const app = express();
@@ -38,6 +39,7 @@ app.use('/auth', authRoutes);
 app.use('/client', clientRoutes);
 app.use('/serviceProvider', serviceProviderRoutes);
 app.use('/review', reviewRoutes);
+app.use('/notification', notificationRoutes);
 
 // Connecting to the MongoDB database
 mongoose.connect(URL).then((x) => {
