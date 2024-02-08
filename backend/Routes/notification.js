@@ -24,14 +24,13 @@ const createNotification = async (req, res) => {
 const getAllNotifications = async (req, res) => {
     const id = req.user._id;
     try {
-        const notifications = await Notification.find({ user: id });
+        const notifications = await Notification.find({ user: id }).sort({ createdAt: -1 });
 
         res.status(200).json({ success: true, message: "Successful", data: notifications });
     } catch (err) {
         res.status(404).json({ success: false, message: "Not found!" });
     }
 };
-
 
 
 const deleteSingleNotification = async (req, res) => {
@@ -73,9 +72,9 @@ const deleteAllNotifications = async (req, res) => {
 
 const router = express.Router();
 
-router.post('/create', createNotification);
-router.post('/deleteOne', deleteSingleNotification);
-router.post('/deleteAll', deleteAllNotifications);
-router.post('/getAll', getAllNotifications);
+router.post('/create', passport.authenticate("jwt", {session: false}), createNotification);
+router.post('/deleteOne', passport.authenticate("jwt", {session: false}), deleteSingleNotification);
+router.post('/deleteAll', passport.authenticate("jwt", {session: false}), deleteAllNotifications);
+router.get('/getAll', passport.authenticate("jwt", {session: false}), getAllNotifications);
 
 module.exports=router;
