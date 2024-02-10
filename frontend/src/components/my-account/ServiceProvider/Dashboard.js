@@ -17,10 +17,10 @@ export default function MyAccount() {
   const token = localStorage.getItem("userToken")
   //  console.log(userData)
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     // Remove data from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    await localStorage.removeItem("legalToken");
+    await localStorage.removeItem("legalUser");
     navigate("/login");
   };
 

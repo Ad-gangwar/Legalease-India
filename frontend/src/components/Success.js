@@ -18,9 +18,7 @@ export default function Success() {
         const response = await makeAuthPostReq("/client/updateStatus", { id: cookies.serviceId});
 
         if (response.success && !toastShown) {
-          toast('Service request made and payment done successfully!', {
-            icon: '😀',
-          });
+          toast.success('Service request made and payment done successfully!');
           setToastShown(true); // Update state to indicate that toast has been shown
         } else if (!response.success) {
           console.log('Failed to update service request status!');

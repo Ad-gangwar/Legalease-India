@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Layout from './Layout/Layout';
 import LawyerImg from '../assets/images/lawyer-01.jpg'

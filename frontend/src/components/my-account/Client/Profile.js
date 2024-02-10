@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Input from '../../shared/Input';
-import { Link, useNavigate } from 'react-router-dom';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
 import HashLoader from 'react-spinners/HashLoader';
 import toast from 'react-hot-toast';
 import { URL } from '../../../utils/config';
 
 export default function Profile({ user }) {
-    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");

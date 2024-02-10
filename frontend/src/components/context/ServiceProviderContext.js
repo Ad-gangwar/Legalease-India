@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext} from "react";
 
 // Create a React context for managing song-related state
 const serviceProviderContext = createContext({

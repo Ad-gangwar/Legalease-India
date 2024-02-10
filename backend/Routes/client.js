@@ -1,6 +1,5 @@
 const Client = require('../models/ClientSchema');
 const Service = require('../models/ServiceSchema');
-const ServiceProvider = require('../models/ServiceProviderSchema');
 const express = require('express');
 const { restrict } = require('../utils/helpers');
 const passport = require('passport');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -17,7 +17,7 @@ import serviceProviderContext from './components/context/ServiceProviderContext'
 import Notifications from './components/shared/Notifications';
 import Cancel from './components/Cancel';
 import Success from './components/Success';
-
+import Help from './components/Help';
 
 export default function App() {
   const [selectedServiceProvider, setSelectedServiceProvider] = useState(null);
@@ -42,6 +42,7 @@ export default function App() {
             <Route path='/cancel' element={<Cancel />}></Route>
             <Route path='/about' element={<About />}></Route>
             <Route path='/services' element={<Services />}></Route>
+            <Route path='/help' element={<Help />}></Route>
             <Route path='/subServices' element={<SubServices />}></Route>
             <Route path='/DocumentServices/:name' element={<DocumentService />}></Route>
             <Route path='/contact' element={<Contact />}></Route>

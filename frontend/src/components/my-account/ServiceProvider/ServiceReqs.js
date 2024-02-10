@@ -5,14 +5,13 @@ import formatDate from '../../../utils/formatDate';
 import { Link } from 'react-router-dom';
 import { makeAuthPostReq } from '../../../utils/serverHelper';
 import toast from 'react-hot-toast';
-import { makeUnauthPostReq } from '../../../utils/serverHelper';
 
 export default function MyServiceReqs() {
     const { data: serviceReqs, loading, error } = UserFetchData('/serviceProvider/ServiceReqs/my-ServiceReqs');
     const [selectedService, setSelectedService] = useState(null);
     const [approvedServiceReqs, setApprovedServiceReqs] = useState([]);
     const [pendingServiceReqs, setPendingServiceReqs] = useState([]);
-    const loggedUser = localStorage.getItem("legalUser")
+    const loggedUser = JSON.parse(localStorage.getItem("legalUser"));
 
     useEffect(() => {
         if (serviceReqs) {
@@ -77,7 +76,7 @@ export default function MyServiceReqs() {
     const handleServiceRequest = async (myText) => {
         // console.log(myText);
         try {
-            const response = await makeUnauthPostReq("/notification/create", {
+            const response = await makeAuthPostReq("/notification/create", {
                 user: selectedService.client._id,
                 userType: "Client",
                 notificationText: myText
@@ -100,7 +99,7 @@ export default function MyServiceReqs() {
             const response = await makeAuthPostReq("/serviceProvider/cancel", { id: selectedService._id });
             if (response.success) {
                 const cancelText = `Your request for ${name} had been cancelled by ${loggedUser.name} due to some issue 😒😒. Try requesting other service provider.`;
-                await handleServiceRequest(cancelText);
+                handleServiceRequest(cancelText);
                 toast('Request Cancelled.', {
                     icon: '😒',
                 });
@@ -120,7 +119,7 @@ export default function MyServiceReqs() {
             const response = await makeAuthPostReq("/serviceProvider/approve", { id: selectedService._id });
             if (response.success) {
                 const approveText = `Your request for the ${name} had been approved by the ${loggedUser.name} 😀😀. Your document once completed will be sent to your provided email.`;
-                await handleServiceRequest(approveText);
+                handleServiceRequest(approveText);
                 toast('Request Approved.', {
                     icon: '😀',
                 });
@@ -172,14 +171,14 @@ export default function MyServiceReqs() {
                 <div className="modal-dialog modal-dialog-centered">
                     {selectedService && <div className="modal-content">
                         <div className="modal-header bg-info bg-opacity-25 shadow">
-                            <h5 className='modal-title fw-bold mainText' id="exampleModalLabel"><span className='text-dark my-bold'>Service Name:</span>{" " + selectedService.serviceName}</h5>
+                            <h5 className='modal-title fw-bold myText' id="exampleModalLabel"><span className='text-dark my-bold'>Service Name:</span>{" " + selectedService.serviceName}</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body bg-secondary bg-opacity-10 p-4">
                             <h6 className='mb-3 mt-2'>Service Request Date: <span className='iconText text-success h5'>{formatDate(selectedService.serviceDate)}</span></h6>
                             <div className='mb-3'>
                                 <h6 className='mb-2'>Provided Documents:</h6>
-                                <div className='row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mb-3'>
+                                <div className='row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 mb-3'>
                                     {selectedService.documents.map((doc, index) => (
                                         <figure key={index} className='col mb-2'>
                                             <Link to={doc} target='_blank'><img src={doc} alt={`Document ${index}`} className="img-fluid" /></Link>

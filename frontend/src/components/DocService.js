@@ -10,7 +10,6 @@ import serviceProviderContext from './context/ServiceProviderContext';
 import formatDate from '../utils/formatDate';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
-import { makeUnauthPostReq } from '../utils/serverHelper';
 import { loadStripe } from '@stripe/stripe-js';
 
 export default function DocumentService() {
@@ -19,13 +18,13 @@ export default function DocumentService() {
     const [docs, setDocs] = useState([]);
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentPoints, setSelectedDocumentPoints] = useState([]);
-    const [cookie, setCookie] = useCookies(["docName", "docFees", "serviceId"]);
+    const [setCookie] = useCookies(["docName", "docFees", "serviceId"]);
     const [fees, setFees] = useState(0);
-    const [cookies] = useCookies(["user"]);
-    const { selectedServiceProvider, setSelectedServiceProvider } = useContext(serviceProviderContext);
+    const { selectedServiceProvider} = useContext(serviceProviderContext);
     const date = new Date();
     const [loading, setLoading] = useState(false);
     const maxSizeInBytes = 250 * 1024;
+    const user = JSON.parse(localStorage.getItem("legalUser"));
 
     useEffect(() => {
         setCookie("docName", name, { path: "/" });
@@ -70,10 +69,10 @@ export default function DocumentService() {
 
     const handleServiceRequest = async () => {
         try {
-            const response = await makeUnauthPostReq("/notification/create", {
+            const response = await makeAuthPostReq("/notification/create", {
                 user: selectedServiceProvider._id,
                 userType: "ServiceProvider",
-                notificationText: `You had received a request for the ${name.replace(/([A-Z])/g, ' $1')} from ${cookies.user.name}`
+                notificationText: `You had received a request for the ${name.replace(/([A-Z])/g, ' $1')} from ${user.name}`
             })
             if (response.success) {
                 console.log("Notification sent");
@@ -102,9 +101,9 @@ export default function DocumentService() {
             // console.log(response.data._id);
             if (response.success) {
                 // You can redirect to a success page or perform any other actions
-                await handleServiceRequest();
-                await setCookie("serviceId", response.data._id, { path: "/" });;
-                
+                handleServiceRequest();
+                setCookie("serviceId", response.data._id, { path: "/" });;
+
                 // toast.success("Service request successful!");
             } else {
                 toast.error(response.message);

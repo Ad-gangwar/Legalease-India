@@ -44,7 +44,7 @@ export default function Navbar() {
                     <li className='list-unstyled mx-2  disappear'>English</li>
                 </ul>
             </div>
-            <div className='d-flex justify-content-around align-items-center px-3 container-fluid' style={{ backgroundColor: "#cef9ffab" }}>
+            <div className='d-flex justify-content-around align-items-center px-3 container-fluid py-4' style={{ backgroundColor: "#cef9ffab" }}>
                 <div className='disappear'>
                     <img src='https://upload.wikimedia.org/wikipedia/commons/4/4f/Ministry_of_Law_and_Justice.png?20220214223421' alt='' width={300} />
                 </div>
@@ -123,7 +123,7 @@ export default function Navbar() {
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' to='#'>
+                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' to='/help'>
                                             Help
                                         </Link>
                                     </li>

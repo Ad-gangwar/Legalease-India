@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 
 
 export default function Success() {
+  
   useEffect=(()=>{
     toast('Service request sent but could not complete payment!', {
       icon: '😒',
