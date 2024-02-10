@@ -15,7 +15,7 @@ export default function ServiceProviderDetails() {
   const [serviceProvider, setServiceProvider] = useState(null);
   const [tab, setTab] = useState('about');
   const { selectedServiceProvider, setSelectedServiceProvider } = useContext(serviceProviderContext);
-  const [cookies] = useCookies(["docName"])
+  const [cookies] = useCookies(["docName", "docFees"])
   const docName = cookies.docName;
 
   useEffect(() => {
@@ -115,14 +115,14 @@ export default function ServiceProviderDetails() {
                 <div className='d-flex justify-content-between'>
                   <p className='mt-0'>Document Charges</p>
                   <span className='my-bold'>
-                    Rs. 400 /-
+                  {`Rs. ${cookies.docFees}/-`}
                   </span>
                 </div>
 
                 <div className='d-flex justify-content-between border-top border-2 mb-2 py-2'>
                   <span>Total Fees</span>
                   <span className='my-bold'>
-                    Rs. 500 /-
+                    Rs. {serviceProvider.fees + cookies.docFees}/-
                   </span>
                 </div>
 

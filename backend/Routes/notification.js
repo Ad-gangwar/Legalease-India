@@ -35,7 +35,7 @@ const getAllNotifications = async (req, res) => {
 
 const deleteSingleNotification = async (req, res) => {
     try {
-        const { notificationId } = req.params;
+        const { notificationId } = req.body;
 
         if (!notificationId) {
             return res.status(400).json({ error: "Notification ID is required." });
@@ -53,7 +53,8 @@ const deleteSingleNotification = async (req, res) => {
 
 const deleteAllNotifications = async (req, res) => {
     try {
-        const { user } = req.body;
+        // console.log(req);
+        const user= req.user._id;
 
         if (!user) {
             return res.status(400).json({ error: "User is required." });

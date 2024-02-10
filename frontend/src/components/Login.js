@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Layout from './Layout/Layout';
 import { useNavigate } from 'react-router-dom';
 import { makeUnauthPostReq } from '../utils/serverHelper';
-import { useCookies } from 'react-cookie';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
 
@@ -12,7 +11,6 @@ export default function Login() {
     let navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [cookie, setCookie] = useCookies(["token", "user"]);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -27,8 +25,8 @@ export default function Login() {
                 //setting time for the expiry of the token
                 const date = new Date();
                 date.setDate(date.getDate() + 30);
-                setCookie("token", token, { path: "/", expires: date });
-                setCookie("user", response.data, { path: "/" });
+                localStorage.setItem("legalToken", token);
+                localStorage.setItem("legalUser", JSON.stringify(response.data));
                 toast.success("Logged in Successfully!");
                 navigate("/");
             } else {

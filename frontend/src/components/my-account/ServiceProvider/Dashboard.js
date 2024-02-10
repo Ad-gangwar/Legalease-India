@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import Profile from './Profile';
 import userGetProfile from '../../../hooks/userFetchData';
 import Loading from '../../Loader/Loading';
@@ -7,21 +6,22 @@ import Error from '../../Error/Error';
 import Layout from '../../Layout/Layout';
 import ServiceReqs from './ServiceReqs';
 import Overview from './Overview';
+import { useNavigate } from 'react-router-dom';
 import { URL } from '../../../utils/config';
 import toast from 'react-hot-toast';
 
 export default function MyAccount() {
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'user']);
+  const navigate=useNavigate();
   const [tab, setTab] = useState('overview');
   const { data: userData, loading, error } = userGetProfile('/serviceProvider/profile/me');
+  const token = localStorage.getItem("userToken")
   //  console.log(userData)
 
   const handleLogout = () => {
-    // Update state after the component has finished rendering
-    setTimeout(() => {
-      removeCookie('token');
-      removeCookie('user');
-    }, 0);
+    // Remove data from localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   const handleDelete = async () => {
@@ -30,7 +30,7 @@ export default function MyAccount() {
         method: 'DELETE', // Specify the HTTP method
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookies.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 

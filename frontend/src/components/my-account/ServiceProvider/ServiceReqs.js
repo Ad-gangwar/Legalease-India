@@ -6,14 +6,13 @@ import { Link } from 'react-router-dom';
 import { makeAuthPostReq } from '../../../utils/serverHelper';
 import toast from 'react-hot-toast';
 import { makeUnauthPostReq } from '../../../utils/serverHelper';
-import { useCookies } from 'react-cookie';
 
 export default function MyServiceReqs() {
     const { data: serviceReqs, loading, error } = UserFetchData('/serviceProvider/ServiceReqs/my-ServiceReqs');
     const [selectedService, setSelectedService] = useState(null);
     const [approvedServiceReqs, setApprovedServiceReqs] = useState([]);
     const [pendingServiceReqs, setPendingServiceReqs] = useState([]);
-    const [cookies] = useCookies(["user"]);
+    const loggedUser = localStorage.getItem("legalUser")
 
     useEffect(() => {
         if (serviceReqs) {
@@ -76,7 +75,7 @@ export default function MyServiceReqs() {
 
 
     const handleServiceRequest = async (myText) => {
-        console.log(myText);
+        // console.log(myText);
         try {
             const response = await makeUnauthPostReq("/notification/create", {
                 user: selectedService.client._id,
@@ -100,7 +99,7 @@ export default function MyServiceReqs() {
         try {
             const response = await makeAuthPostReq("/serviceProvider/cancel", { id: selectedService._id });
             if (response.success) {
-                const cancelText = `Your request for ${name} had been cancelled by ${cookies.user.name} due to some issue 😒😒. Try requesting other service provider.`;
+                const cancelText = `Your request for ${name} had been cancelled by ${loggedUser.name} due to some issue 😒😒. Try requesting other service provider.`;
                 await handleServiceRequest(cancelText);
                 toast('Request Cancelled.', {
                     icon: '😒',
@@ -120,7 +119,7 @@ export default function MyServiceReqs() {
         try {
             const response = await makeAuthPostReq("/serviceProvider/approve", { id: selectedService._id });
             if (response.success) {
-                const approveText = `Your request for the ${name} had been approved by the ${cookies.user.name} 😀😀. Your document once completed will be sent to your provided email.`;
+                const approveText = `Your request for the ${name} had been approved by the ${loggedUser.name} 😀😀. Your document once completed will be sent to your provided email.`;
                 await handleServiceRequest(approveText);
                 toast('Request Approved.', {
                     icon: '😀',

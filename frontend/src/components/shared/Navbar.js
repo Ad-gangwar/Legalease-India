@@ -1,24 +1,35 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import digitalIndia from '../../assets/images/digital-india.png';
-import { useCookies } from "react-cookie";
 import Bell from '../../assets/images/bell.gif';
 import Bell2 from '../../assets/images/bell2.gif';
+
+
 export default function Navbar() {
-    const [cookies] = useCookies(["token", "user"]);
-    const token = cookies.token;
-    const user = cookies.user;
+    const [token, setToken] = useState(null);
+
+    const [user, setUser] = useState({});
+
     let navigate = useNavigate();
 
-     // State to track hover status
-     const [isHovered, setIsHovered] = useState(false);
+    useEffect(() => {
+        const storedUser = localStorage.getItem("legalUser");
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+        }
+        setToken(localStorage.getItem("legalToken"));
+    }, []);
 
-     // Function to handle hover
-     const handleHover = () => {
-         setIsHovered(!isHovered);
-     };
+    // State to track hover status
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Function to handle hover
+    const handleHover = () => {
+        setIsHovered(!isHovered);
+    };
 
     return (
         <div className='iconText'>
@@ -66,7 +77,7 @@ export default function Navbar() {
                             <div className='d-flex'>
                                 <ul className='navbar-nav'>
                                     <li className='nav-item border border-dark border-1 border-top-0'>
-                                        {token ? <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to={user && user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me'}>
+                                        {token ? <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to={user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me'}>
                                             <span><Icon icon='ic:baseline-account-circle' width={30} className='me-1' /></span> My Account
                                         </Link> : <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to='/signup'>
                                             Sign up
@@ -78,16 +89,16 @@ export default function Navbar() {
                                         </Link>
                                     </li>)}
 
-                                    {token && (<li className='nav-item border border-dark border-1 border-top-0 '>
+                                    {token && (<li className='nav-item border border-dark border-1 border-top-0 ' onMouseEnter={handleHover}
+                                        onMouseLeave={handleHover}>
                                         <Link className='nav-link hoverBox d-flex h-100 align-items-center px-2' aria-current='page' to='/notifications'>
                                             <img
                                                 src={isHovered ? Bell : Bell2}
                                                 style={{ maxWidth: "33px" }}
                                                 className='h-100'
-                                                onMouseEnter={handleHover}
-                                                onMouseLeave={handleHover}
                                                 alt="Bell"
                                             />
+                                            <span className='ps-2'>Notifications</span>
                                         </Link>
                                     </li>)}
 

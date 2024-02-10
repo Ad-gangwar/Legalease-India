@@ -3,7 +3,6 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { Icon } from '@iconify/react';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
 import toast from 'react-hot-toast';
-import { useCookies } from 'react-cookie';
 import HashLoader from 'react-spinners/HashLoader';
 import { URL } from '../../../utils/config';
 
@@ -13,8 +12,7 @@ export default function Profile({ serviceProvider }) {
   const [selectedFile, setSelectedFile] = useState("");
   const [previewURL, setPreviewURL] = useState("");
   const [loading, setLoading] = useState(false);
-  const [cookies] = useCookies(["token"]);
-  const token = cookies.token;
+  const token = localStorage.getItem("legalToken");
 
   const [serviceProviderData, setData] = useState({
     name: "",

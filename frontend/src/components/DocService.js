@@ -11,6 +11,7 @@ import formatDate from '../utils/formatDate';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
 import { makeUnauthPostReq } from '../utils/serverHelper';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default function DocumentService() {
     const { name } = useParams();
@@ -18,7 +19,8 @@ export default function DocumentService() {
     const [docs, setDocs] = useState([]);
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentPoints, setSelectedDocumentPoints] = useState([]);
-    const [cookie, setCookie] = useCookies(["docName"]);
+    const [cookie, setCookie] = useCookies(["docName", "docFees", "serviceId"]);
+    const [fees, setFees] = useState(0);
     const [cookies] = useCookies(["user"]);
     const { selectedServiceProvider, setSelectedServiceProvider } = useContext(serviceProviderContext);
     const date = new Date();
@@ -27,12 +29,14 @@ export default function DocumentService() {
 
     useEffect(() => {
         setCookie("docName", name, { path: "/" });
-    }, [name, setCookie]);
-    
+        setCookie("docFees", fees, { path: "/" });
+    }, [name, fees]);
+
 
     const fetchData = () => {
         const document = Documents[name];
         setSelectedDocument(document);
+        setFees(Documents["fees"]);
         const docPoints = Documents[name + "Points"];
         setSelectedDocumentPoints(docPoints);
     };
@@ -64,18 +68,18 @@ export default function DocumentService() {
         }
     };
 
-    const handleServiceRequest=async()=>{
-        try{
-            const response=await makeUnauthPostReq("/notification/create", {
+    const handleServiceRequest = async () => {
+        try {
+            const response = await makeUnauthPostReq("/notification/create", {
                 user: selectedServiceProvider._id,
                 userType: "ServiceProvider",
                 notificationText: `You had received a request for the ${name.replace(/([A-Z])/g, ' $1')} from ${cookies.user.name}`
             })
-            if(response.success){
+            if (response.success) {
                 console.log("Notification sent");
             }
         }
-        catch(error){
+        catch (error) {
             console.log("Error", error);
         }
     }
@@ -85,24 +89,38 @@ export default function DocumentService() {
         try {
             // console.log(name.replace(/([A-Z])/g, ' $1'));
             // console.log(docs);
+            const stripe = await loadStripe("pk_test_51OhVP9SHqLdpzfMap6lAFVjNj46jcT1bfXVlgSjjzqi4N6kNZAXrB74UVkSzbGzKXhPFixHlpiPAvHVntLyvrQfo00em9k2NYT");
+
             const response = await makeAuthPostReq("/client/makeServiceReq", {
                 serviceName: name.replace(/([A-Z])/g, ' $1'),
-                serviceProvider: selectedServiceProvider._id,
-                fees: selectedServiceProvider.fees ? selectedServiceProvider.fees : "500",
+                serviceProvider: selectedServiceProvider,
+                fees: selectedServiceProvider.fees + fees,
                 documents: docs,
                 serviceDate: formatDate(date),
             });
 
+            // console.log(response.data._id);
             if (response.success) {
                 // You can redirect to a success page or perform any other actions
-                handleServiceRequest();
-                toast.success("Service request successful!");
+                await handleServiceRequest();
+                await setCookie("serviceId", response.data._id, { path: "/" });;
+                
+                // toast.success("Service request successful!");
             } else {
                 toast.error(response.message);
             }
+
+            const result = await stripe.redirectToCheckout({
+                sessionId: response.session.id
+            })
+
+            if (result.error) {
+                console.log(result.error)
+            }
+            // console.log(response);
             setLoading(false);
         } catch (error) {
-            toast.error("You are not authorized😒 Try logging In.");
+            toast.error("You are not authorized😒");
             console.log(error);
             setLoading(false);
         }
@@ -161,8 +179,9 @@ export default function DocumentService() {
                         ))}
                     </ul>
                 </section>
+                <p className='my-4'><span className='my-bold'>Note: </span>This is test payment gateway of Stripe. Use <span className='iconText'>4000003560000008</span> as the card number to successfully complete the payment. Remember to copy it before proceeding to payment page.</p>
                 <button className='btn btn-danger rounded-pill mx-auto d-block mt-4 mb-5 p-3 fs-5 my-bold px-5' onClick={handleSubmit}>Request Service</button>
-            </div>) : <div>Document Details not found!</div>}
+            </div>) : <div className='text-center my-5 fw-bold'>Document Details not found!</div>}
         </Layout>
     )
 }

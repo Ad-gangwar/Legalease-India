@@ -4,8 +4,7 @@ import { createContext, useState } from "react";
 const serviceProviderContext = createContext({
     // Initial state values for the context
     selectedServiceProvider: null,
-    setSelectedServiceProvider: (serviceProvider) => {}
-
+    setSelectedServiceProvider: (serviceProvider) => {},
 });
 
 export default serviceProviderContext;

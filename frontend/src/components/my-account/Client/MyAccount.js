@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import MyServiceReqs from './MyServiceReq';
 import Profile from './Profile';
 import clientGetProfile from '../../../hooks/userFetchData';
@@ -8,15 +7,19 @@ import Error from '../../Error/Error';
 import Layout from '../../Layout/Layout';
 import { URL } from '../../../utils/config';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyAccount() {
-    const [cookies, setCookie, removeCookie] = useCookies(['token', 'user']);
+    const navigate=useNavigate();
     const [tab, setTab] = useState('serviceReqs');
     const { data: userData, loading, error } = clientGetProfile('/client/profile/me');
+    const token =localStorage.getItem("legalToken");
 
     const handleLogout = () => {
-        removeCookie('token');
-        removeCookie('user');
+        // Remove data from localStorage
+        localStorage.removeItem("legalToken");
+        localStorage.removeItem("legalUser");
+        navigate("/login");
     };
 
     const handleDelete = async () => {
@@ -25,7 +28,7 @@ export default function MyAccount() {
                 method: 'DELETE', // Specify the HTTP method
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${cookies.token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
 

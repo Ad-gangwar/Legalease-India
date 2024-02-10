@@ -138,7 +138,7 @@ router.get('/:id', getSingleServiceProvider);
 router.get('/',  getAllServiceProviders);
 router.put('/:id',  passport.authenticate("jwt", {session: false}), restrict(["serviceProvider"]), updateServiceProvider); 
 router.delete('/:id',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  deleteServiceProvider);
-router.post('/cancel',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  deleteServiceReq);
+router.post('/cancel',  passport.authenticate("jwt", {session: false}), deleteServiceReq);
 router.post('/approve',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  approveReq);
 router.get('/profile/me',passport.authenticate("jwt", { session: false }), restrict(["serviceProvider"]),  getServiceProviderProfile);
 router.get('/ServiceReqs/my-ServiceReqs',passport.authenticate("jwt", { session: false }), restrict(["serviceProvider"]),  getMyServiceReqs); 

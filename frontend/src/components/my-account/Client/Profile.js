@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
 import HashLoader from 'react-spinners/HashLoader';
 import toast from 'react-hot-toast';
-import { useCookies } from 'react-cookie';
 import { URL } from '../../../utils/config';
 
 export default function Profile({ user }) {
@@ -15,8 +14,7 @@ export default function Profile({ user }) {
     const [gender, setGender] = useState("");
     const [loading, setLoading] = useState(false);
     const [photo, setPhoto] = useState(null);
-    const [cookies] = useCookies(["token"]);
-    const token = cookies.token;
+    const token = localStorage.getItem("legalToken");
 
     const handleFileInputChange = async (e) => {
         const file = e.target.files[0];
