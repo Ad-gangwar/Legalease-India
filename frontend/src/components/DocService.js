@@ -18,7 +18,7 @@ export default function DocumentService() {
     const [docs, setDocs] = useState([]);
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentPoints, setSelectedDocumentPoints] = useState([]);
-    const [setCookie] = useCookies(["docName", "docFees", "serviceId"]);
+    const [cookie, setCookie] = useCookies(["docName", "docFees", "serviceId"]);
     const [fees, setFees] = useState(0);
     const { selectedServiceProvider} = useContext(serviceProviderContext);
     const date = new Date();
@@ -180,7 +180,7 @@ export default function DocumentService() {
                 </section>
                 <p className='my-4'><span className='my-bold'>Note: </span>This is test payment gateway of Stripe. Use <span className='iconText'>4000003560000008</span> as the card number to successfully complete the payment. Remember to copy it before proceeding to payment page.</p>
                 <button className='btn btn-danger rounded-pill mx-auto d-block mt-4 mb-5 p-3 fs-5 my-bold px-5' onClick={handleSubmit}>Request Service</button>
-            </div>) : <div className='text-center my-5 fw-bold'>Document Details not found!</div>}
+            </div>) : <div className='text-center my-5 h2 py-4'>😒 Document Details not found!</div>}
         </Layout>
     )
 }
