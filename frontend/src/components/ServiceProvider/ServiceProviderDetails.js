@@ -26,13 +26,13 @@ export default function ServiceProviderDetails() {
         if (response.success) {
           await setServiceProvider(response.data);
         }
-      } catch (error) {    
+      } catch (error) {
         console.error("Error:", error);
       }
     };
     getServiceProvider();
-  }, [serviceProviderId]); 
-  
+  }, [serviceProviderId]);
+
 
   const handleSelectServiceProvider = async () => {
     // Set the selected serviceProvider in the context
@@ -42,7 +42,7 @@ export default function ServiceProviderDetails() {
 
   // console.log(serviceProvider);
 
-  if(serviceProvider===null){
+  if (serviceProvider === null) {
     return <div>Loading</div>
   }
 
@@ -70,15 +70,23 @@ export default function ServiceProviderDetails() {
                     <h6 className='mt-2'>
                       Contact No.  <span className='iconText text-success'>{serviceProvider.phone}</span>
                     </h6>
-                    <div className='d-flex align-items-center gap-1 my-2'>
-                      <span className='d-flex align-items-center gap-1 my-bold'>
-                        <img src={starIcon} alt='' />
-                        {serviceProvider.rating}
-                      </span>
-                      <span>
-                        ({serviceProvider.totalReviews})
-                      </span>
+                    <div className='d-flex align-items-center justify-content-between gap-5'>
+                      <div className='d-flex align-items-center gap-1 my-2'>
+                        <span className='d-flex align-items-center gap-1 my-bold'>
+                          <img src={starIcon} alt='' />
+                          {serviceProvider.rating}
+                        </span>
+                        <span>
+                          ({serviceProvider.totalReviews})
+                        </span>
+                      </div>
+                      <div>
+                        <h6 className='text-para pt-2'>
+                          +{serviceProvider.casesHandled} cases handled
+                        </h6>
+                      </div>
                     </div>
+
                     <p>
                       {serviceProvider.bio ? serviceProvider.bio : `Experienced ${serviceProvider.specialization} delivering top-notch legal representation.`}
                     </p>
@@ -100,7 +108,7 @@ export default function ServiceProviderDetails() {
 
               <div className='mt-3'>
                 {tab === 'about' && <AboutServiceProvider serviceProvider={serviceProvider} />}
-                {tab === 'feedback' && <Feedback serviceProvider={serviceProvider}/>}
+                {tab === 'feedback' && <Feedback serviceProvider={serviceProvider} />}
               </div>
             </div>
 
@@ -115,7 +123,7 @@ export default function ServiceProviderDetails() {
                 <div className='d-flex justify-content-between'>
                   <p className='mt-0'>Document Charges</p>
                   <span className='my-bold'>
-                  {`Rs. ${cookies.docFees}/-`}
+                    {cookies.docFees ? `Rs. ${cookies.docFees}/-`: "NaN/-"}
                   </span>
                 </div>
 

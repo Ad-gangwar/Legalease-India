@@ -26,7 +26,7 @@ const ServiceProviderSchema = new mongoose.Schema({
     type: String 
   },
   phone: {
-    type: Number
+    type: String
   },
   fees: {
     type: Number

@@ -56,7 +56,7 @@ export default function ServiceProviders() {
               <h5 className='mainText text-center my-4 my-bold'>No Service Provider found 😒!</h5>
               :
               serviceProviders.map((serviceProvider, index) => (
-                <div key={serviceProvider._id} className="col col-lg-3 col-md-4 col-sm-12 col-12 my-2 mx-auto" style={{ maxWidth: "350px" }}>
+                <div key={serviceProvider._id} className="col col-lg-3 col-md-4 col-sm-6 col-12 my-2" style={{ maxWidth: "350px" }}>
                   <ServiceProviderCard serviceProvider={serviceProvider} />
                 </div>
               ))}

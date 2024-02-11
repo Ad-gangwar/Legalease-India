@@ -40,9 +40,9 @@ export default function Profile({ serviceProvider }) {
       specialization: serviceProvider.specialization,
       fees: serviceProvider.fees,
       about: serviceProvider.about,
-      photo: serviceProvider.photo,
       organisation: serviceProvider.organisation,
     });
+    setSelectedFile(serviceProvider.photo);
     setExperienceForms(serviceProvider.experiences);
     setQualificationForms(serviceProvider.qualifications);
   }, [serviceProvider]);
@@ -101,7 +101,7 @@ export default function Profile({ serviceProvider }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const experiences = experienceForms
       .filter((exp) => exp.startDate || exp.endDate || exp.organisation || exp.position)
       .map((exp) => ({
@@ -110,7 +110,7 @@ export default function Profile({ serviceProvider }) {
         organisation: exp.organisation,
         position: exp.position,
       }));
-
+  
     const qualifications = qualificationForms
       .filter((qual) => qual.startDate || qual.endDate || qual.university || qual.degree)
       .map((qual) => ({
@@ -119,15 +119,16 @@ export default function Profile({ serviceProvider }) {
         university: qual.university,
         degree: qual.degree,
       }));
-
+  
     const data = {
       ...serviceProviderData,
       experiences,
       qualifications,
+      photo: selectedFile
     };
-
+  
     try {
-      const response = await fetch(URL + "/serviceProvider/" + serviceProvider._id, {
+      const response = await fetch(URL + "/serviceProvider/update/" + serviceProvider._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -135,24 +136,32 @@ export default function Profile({ serviceProvider }) {
         },
         body: JSON.stringify(data),
       });
-
-      if (response && !response.err) {
+  
+      if (response.ok) {
+        const responseData = await response.json();
+        // console.log(responseData);
         toast.success("Updated Successfully!");
-        setLoading(false);
         window.location.reload();
+      } else {
+        // If the response status is not in the 200-299 range
+        // Display error message based on response status
+        const errorMessage = await response.text();
+        toast.error(`Failed to update: ${response.status} - ${errorMessage}`);
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error(
         `An unexpected error occurred: ${error.message || "Unknown error"}`
       );
+    } finally {
+      setLoading(false);
     }
-  };
+  };  
 
 
   return (
     <div style={{ maxWidth: '700px' }} className="mx-auto">
-      {serviceProvider.isApproved==='pending' && (
+      {serviceProvider.isApproved === 'pending' && (
         <p className="p-2 rounded bg-warning bg-opacity-25" style={{ color: 'brown' }}>
           <span className="mx-1">
             <FiAlertCircle />
@@ -191,7 +200,7 @@ export default function Profile({ serviceProvider }) {
           <label htmlFor="organisation" className="form-label" >
             Currently working at*
           </label>
-          <input type="text" className="form-control" id="organisation"  name='organisation' value={serviceProviderData.organisation} placeholder='Enter the name of the organisation or the address'
+          <input type="text" className="form-control" id="organisation" name='organisation' value={serviceProviderData.organisation} placeholder='Enter the name of the organisation or the address'
             onChange={handleInputChange} />
         </div>
 
@@ -232,7 +241,9 @@ export default function Profile({ serviceProvider }) {
               <option value="Select">Select</option>
               <option value="Notary">Notary</option>
               <option value="Law Firm">Law Firm</option>
-              <option value="serviceProvider">Lawyer</option>
+              <option value="Lawyer">Lawyer</option>
+              <option value="Criminal Lawyer">Criminal Lawyer</option>
+              <option value="Document Drafter">Document Drafter</option>
             </select>
           </div>
 

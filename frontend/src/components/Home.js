@@ -141,7 +141,7 @@ export default function Home() {
               <p className='text-para my-4 '>
                 At Legal-Ease India, we are on a mission to revolutionize the way legal services are accessed and delivered. We understand that legal matters are an integral part of our lives, and the traditional methods of seeking legal assistance can often be time-consuming and challenging.
               </p>
-              <button className='btn btn-danger rounded-pill p-3 my-3 my-bold' onClick={() => navigate("/about")}>Know More</button>
+              <button className='btn btn-danger rounded-pill py-3 px-4 my-3 my-bold' onClick={() => navigate("/about")}>Know More</button>
             </div>
           </div>
         </div>

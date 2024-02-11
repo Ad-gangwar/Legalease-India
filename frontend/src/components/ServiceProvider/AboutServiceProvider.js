@@ -24,26 +24,28 @@ export default function AboutServiceProvider({ serviceProvider }) {
         <h5>
           Education
         </h5>
-        <ul className='list-unstyled mt-3 row gap-3 container'>
+        <ul className='list-unstyled mt-3 row ps-3'>
           {serviceProvider.qualifications.map((qual, index) => (
-            <li className='col-md-4 col-sm-6 col-xs-12 p-3 shadow rounded' key={index}>
-              <div className='text-danger mb-2'>
-                {formatDate(qual.startDate)} - {formatDate(qual.endDate)}
+            <li className='col-md-4 col-sm-6 col-xs-12 p-2' key={index}>
+              <div className='shadow rounded p-3'>
+                <div className='text-danger mb-2'>
+                  {formatDate(qual.startDate)} - {formatDate(qual.endDate)}
+                </div>
+                <p>{qual.degree}</p>
+                <p className='mb-0'>
+                  {qual.university}
+                </p>
               </div>
-              <p>{qual.degree}</p>
-              <p className='mb-0'>
-                {qual.university}
-              </p>
             </li>
           ))}
         </ul>
       </div>
 
       <div>
-        <h5>
+        <h5 className='mt-4'>
           Experience
         </h5>
-        <ul className='list-unstyled row mt-4 row'>
+        <ul className='list-unstyled row mt-3 row ps-2'>
           {serviceProvider.experiences.map((exp, index) => (
             <li className='col-md-4 col-sm-6 col-xs-12 my-2' key={index}>
               <div className='rounded p-3' style={{ backgroundColor: "#fff9ea" }}>

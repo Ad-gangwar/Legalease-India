@@ -21,7 +21,7 @@ const ClientSchema = new mongoose.Schema({
     type: String 
   },
   phone: {
-    type: Number
+    type: String
   },
   role: {
     type: String,

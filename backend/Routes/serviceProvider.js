@@ -5,15 +5,24 @@ const reviewRouter=require('./review');
 const {restrict} = require('../utils/helpers');
 const passport = require('passport');
 
+const mongoose = require('mongoose');
+
 const updateServiceProvider = async (req, res) => {
     const id = req.params.id;
+    // console.log(id, req.body);
+
     try {
         const updatedServiceProvider = await ServiceProvider.findByIdAndUpdate(id, { $set: req.body }, { new: true });
+        if (!updatedServiceProvider) {
+            return res.status(404).json({ success: false, message: 'ServiceProvider not found' });
+        }
         res.status(200).json({ success: true, message: 'Successfully updated', data: updatedServiceProvider });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ success: false, message: 'Failed' });
     }
 };
+
 
 const deleteServiceProvider = async (req, res) => {
     const id = req.params.id;
@@ -136,7 +145,7 @@ const router = express.Router();
 router.use('/:serviceProviderId/review', reviewRouter);
 router.get('/:id', getSingleServiceProvider);
 router.get('/',  getAllServiceProviders);
-router.put('/:id',  passport.authenticate("jwt", {session: false}), restrict(["serviceProvider"]), updateServiceProvider); 
+router.put('/update/:id',  passport.authenticate("jwt", {session: false}), restrict(["serviceProvider"]), updateServiceProvider); 
 router.delete('/:id',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  deleteServiceProvider);
 router.post('/cancel',  passport.authenticate("jwt", {session: false}), deleteServiceReq);
 router.post('/approve',  passport.authenticate("jwt", {session: false}),restrict(["serviceProvider"]),  approveReq);

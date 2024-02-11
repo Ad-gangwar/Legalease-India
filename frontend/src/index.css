@@ -201,7 +201,7 @@ code {
 .swiper-slide.swiper-slide-next{
   background: #c32929 !important;
   border-radius: 12px;
-  box-shadow: 0px 15px 70px #d98181 !important;
+  box-shadow: 0px 15px 60px #d98181 !important;
 }
 .swiper-slide.swiper-slide-next h4,
 .swiper-slide.swiper-slide-next p{
