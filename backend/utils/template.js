@@ -60,15 +60,19 @@ const otpTemplate = (otp) => {
 			.highlight {
 				font-weight: bold;
 			}
+
+			.main{
+				font-weight: bold;
+			}
 		</style>
 	
 	</head>
 	
 	<body>
 		<div class="container">
-             <h2 class="text-center">
-             Legal-Ease India
-             </h2>
+             <h1 class="text-center">
+               Legal-Ease India
+             </h1>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
 				<p>Dear User,</p>
@@ -79,7 +83,7 @@ const otpTemplate = (otp) => {
 				Once your account is verified, you will have access to our platform and its features.</p>
 			</div>
 			<div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-					href="mailto:info@studynotion.com">info@studynotion.com</a>. We are here to help!</div>
+					href="legaleaseindiaoffiical@gmail.com">legaleaseindiaoffiical@gmail.com</a>. We are here to help!</div>
 		</div>
 	</body>
 	
