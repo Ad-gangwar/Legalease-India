@@ -70,12 +70,27 @@ router.post("/generateOTP", async (req, res) => {
 
 router.post("/verifyOTP", async (req, res) => {
     try {
+        // console.log(req.body);
         const { email, otp } = req.body;
-        //find most recent otp for the user
+        // Find most recent OTP for the user
         const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-        // console.log(recentOtp[0].otp);
+        
+        // Check if there is any OTP found
+        if (recentOtp.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No OTP found for the provided email",
+            });
+        }
+        
+        // Check if the OTP matches
+        if (recentOtp[0].otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP",
+            });
+        }
 
-        //validate otp
         // If OTP is valid, send a success response
         res.status(200).json({
             success: true,
@@ -89,6 +104,7 @@ router.post("/verifyOTP", async (req, res) => {
         });
     }
 });
+
 
 router.post('/register', async (req, res) => {
     // Extracting user details from the request body

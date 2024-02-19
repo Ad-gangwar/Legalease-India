@@ -62,8 +62,8 @@ export default function MyServiceReqs() {
                                 ))}
                             </div>
                             <div className='d-flex justify-content-between'>
-                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-end'>{service.isPaid ? <span>Paid</span> : <span>Payment Pending</span>}</div>
-                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-start'>{service.status.charAt(0).toUpperCase() + service.status.slice(1)}</div>
+                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-end me-1'>{service.isPaid ? <span>Paid</span> : <span>Payment Pending</span>}</div>
+                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-start ms-1'>{service.status.charAt(0).toUpperCase() + service.status.slice(1)}</div>
                             </div>
                             <div className='my-bold h6'>Service Provider:</div>
                             {service.serviceProvider &&

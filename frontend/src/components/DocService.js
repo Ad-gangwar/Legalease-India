@@ -105,10 +105,7 @@ export default function DocumentService() {
                 setCookie("serviceId", response.data._id, { path: "/" });;
 
                 // toast.success("Service request successful!");
-            } else {
-                toast.error(response.message);
             }
-
             const result = await stripe.redirectToCheckout({
                 sessionId: response.session.id
             })

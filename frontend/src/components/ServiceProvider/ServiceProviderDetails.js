@@ -8,6 +8,7 @@ import Feedback from './Feedback';
 import { useCookies } from 'react-cookie';
 import serviceProviderContext from '../context/ServiceProviderContext';
 import { makeUnauthGetReq } from '../../utils/serverHelper';
+import Loader from '../Loader/Loading';
 
 export default function ServiceProviderDetails() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function ServiceProviderDetails() {
   // console.log(serviceProvider);
 
   if (serviceProvider === null) {
-    return <div>Loading</div>
+    return <div className='d-flex align-items-center justify-content-center vw-100 vh-100'><Loader/></div>
   }
 
   return (

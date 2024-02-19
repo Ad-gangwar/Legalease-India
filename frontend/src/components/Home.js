@@ -130,15 +130,15 @@ export default function Home() {
       </section>
 
       {/* ---------------About section------------------ */}
-      <section className='pt-4'>
+      <section className='pt-4 mt-3'>
         <div className='container mx-auto'>
           <div className='row'>
-            <div className='col-lg-4 col-md-12 p-3 px-4 text-center'>
-              <img src={LawyerImg} alt='' className='rounded-circle img-fluid' style={{ maxWidth: "320px" }} />
+            <div className='col-lg-4 col-md-12 p-2 text-center'>
+              <img src={LawyerImg} alt='' className='rounded-circle img-fluid' style={{ maxWidth: "300px" }} />
             </div>
-            <div className='col-lg-8 col-md-12 p-3 px-5 d-flex align-items-start flex-column justify-content-center'>
+            <div className='col-lg-8 col-md-12 py-3 px-4 d-flex align-items-start flex-column justify-content-center'>
               <h2 className='fw-bold break-word word-wrap  text-start'>Welcome to <span className='fs-1 mainText'>Legal-Ease India</span></h2>
-              <p className='text-para my-4 '>
+              <p className='text-para my-2'>
                 At Legal-Ease India, we are on a mission to revolutionize the way legal services are accessed and delivered. We understand that legal matters are an integral part of our lives, and the traditional methods of seeking legal assistance can often be time-consuming and challenging.
               </p>
               <button className='btn btn-danger rounded-pill py-3 px-4 my-3 my-bold' onClick={() => navigate("/about")}>Know More</button>
@@ -150,10 +150,10 @@ export default function Home() {
       {/* help section */}
       <section className='mb-4'>
         <div className='row container mx-auto'>
-          <div className='col-md-8 d-flex flex-column justify-content-end mb-4'>
-            <div className='d-xl-flex gap-3 align-items-end'>
+          <div className='col-md-8 d-flex flex-column justify-content-end my-4'>
+            <div className='d-xxl-flex gap-3 align-items-end'>
               <h1 className='mainText iconText'>Seamless Legal Support </h1>
-              <h5 className='iconText my-2 pb-1'>Navigate Our Services with Ease</h5>
+              <h5 className='iconText mt-3 pb-1'>Navigate Our Services with Ease</h5>
             </div>
             <ul className='list-unstyled ps-3 my-3'>
               <li className='text-para my-3'>

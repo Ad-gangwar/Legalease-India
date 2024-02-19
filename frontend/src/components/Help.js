@@ -34,7 +34,7 @@ export default function Help() {
                                     4. Read the instructions carefully and provide the needed documents.
                                 </li>
                                 <li className='text-para my-3'>
-                                    5. Click on the servic request button to navigate to the payment page to pay for the service.
+                                    5. Click on the service request button to navigate to the payment page to pay for the service.
                                 </li>
                                 <li className='text-para my-3'>
                                     6. Enter your card detais and click on pay to pay for the fees.

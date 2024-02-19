@@ -133,7 +133,7 @@ export default function MyServiceReqs() {
             console.log("Error", error);
         }
     }
-
+   
     return (
         <div>
             {loading && (
@@ -190,6 +190,7 @@ export default function MyServiceReqs() {
                                 <h6 className='text-success text-para my-3'>Requested by:</h6>
                                 <h5 className='mb-3 text-danger iconText'>{selectedService.client.name}</h5>
                                 <p>Email: <span className='my-bold'>{selectedService.client.email}</span></p>
+                                <p>Contact Number : <span className='my-bold'>{selectedService.client.phone}</span></p>
                                 <p>Address: <span className='my-bold'>{selectedService.client.address}</span></p>
                             </div>
                             <div className='d-flex gap-3 align-items-center'>

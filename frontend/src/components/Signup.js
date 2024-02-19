@@ -60,7 +60,7 @@ export default function Signup() {
         e.preventDefault();
         // Add logic for OTP verification here if needed
         try {
-            const response = await makeUnauthPostReq("/auth/verifyOTP", { email, enteredOTP });
+            const response = await makeUnauthPostReq("/auth/verifyOTP", { email, otp: enteredOTP });
             if (!response.success) {
                 toast.error(response.message);
             }
@@ -79,10 +79,12 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // if (!otp && !verified) {
-        //     setLoading(false);
-        //     return toast.error("Verify the OTP first!");
-        // }
+
+        if (!verified) {
+            setLoading(false);
+            return toast.error("Verify the OTP first!");
+        }
+
         const data = { email, name, password, role, gender, photo: selectedFile, address };
         try {
             const response = await makeUnauthPostReq('/auth/register', data);

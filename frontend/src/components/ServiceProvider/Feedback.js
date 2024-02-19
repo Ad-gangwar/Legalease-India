@@ -31,7 +31,7 @@ export default function Feedback({ serviceProvider }) {
               </div>
             </div>
 
-            <div className='d-flex gap-1 stars'>
+            <div className='d-flex gap-1 stars mb-4'>
               {[...Array(review.rating).keys()].map((_, index) => (
                 <AiFillStar key={index} color='#0067FF' />
               ))}
