@@ -10,6 +10,7 @@ import ServiceProviders from './components/ServiceProvider/ServiceProviders';
 import ServiceProviderDetails from './components/ServiceProvider/ServiceProviderDetails';
 import SubServices from './components/SubServices';
 import DocumentService from './components/DocService';
+import GenericService from './components/GenericService';
 import { Toaster } from 'react-hot-toast';
 import MyAccount from './components/my-account/Client/MyAccount';
 import Dashboard from './components/my-account/ServiceProvider/Dashboard';
@@ -46,8 +47,9 @@ export default function App() {
             <Route path='/about' element={<About />}></Route>
             <Route path='/services' element={<Services />}></Route>
             <Route path='/help' element={<Help />}></Route>
-            <Route path='/subServices' element={<SubServices />}></Route>
+            <Route path='/subServices/:serviceType' element={<SubServices />}></Route>
             <Route path='/DocumentServices/:name' element={<DocumentService />}></Route>
+            <Route path='/service/:serviceType/:serviceName' element={<GenericService />}></Route>
             <Route path='/contact' element={<Contact />}></Route>
             <Route path='/notifications' element={<Notifications />}></Route>
             <Route path='serviceProvider/:serviceProviderId' element={<ServiceProviderDetails />}></Route>

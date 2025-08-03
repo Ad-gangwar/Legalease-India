@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { BsArrowRight } from 'react-icons/bs';
 import { makeAuthPostReq } from '../../../utils/serverHelper';
 import toast from 'react-hot-toast';
+import { Icon } from '@iconify/react';
 
 export default function MyServiceReqs() {
     const { data: serviceReqs, loading, error } = UserFetchData('/client/ServiceReqs/my-ServiceReqs');
@@ -23,6 +24,18 @@ export default function MyServiceReqs() {
         }
     }, [serviceReqs]);
 
+    // Function to get file type icon and determine if it's an image
+    const getFileInfo = (url) => {
+        const extension = url.split('.').pop()?.toLowerCase();
+        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension);
+        const isPdf = extension === 'pdf';
+        
+        let icon = "mdi:file-document-outline";
+        if (isImage) icon = "mdi:file-image-outline";
+        if (isPdf) icon = "mdi:file-pdf-box";
+        
+        return { isImage, icon, extension };
+    };
 
     const handleWithdraw = async (reqId) => {
         try {
@@ -53,18 +66,81 @@ export default function MyServiceReqs() {
                         <div className={`col mb-4 p-3 border border-2 rounded pulse ${service.status === 'pending' ? 'border-danger' : 'border-success'}`}>
                             <h5 className={`${service.status === 'pending' ? 'mybg' : 'bg-success'} mb-3  p-2 text-white px-3 rounded-end`}>{service.serviceName}</h5>
                             <h6 className='mb-3'>Service Request Date: <span className='my-bold text-success fw-bold'>{formatDate(service.serviceDate)}</span></h6>
-                            <h6 className='mb-2'>My Documents:</h6>
-                            <div className='row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mb-3'>
-                                {service.documents.map((doc, index) => (
-                                    <figure key={index} className='col mb-2'>
-                                        <Link to={doc} target='_blank'><img src={doc} alt={`Document ${index}`} className="img-fluid" /></Link>
-                                    </figure>
-                                ))}
+                            
+                            {/* Documents Section */}
+                            <div className='mb-3'>
+                                <h6 className='mb-2 d-flex align-items-center'>
+                                    <Icon icon="mdi:file-document-multiple" className='me-2' />
+                                    My Documents ({service.documents.length})
+                                </h6>
+                                {service.documents.length > 0 ? (
+                                    <div className='row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-2'>
+                                        {service.documents.map((doc, docIndex) => {
+                                            const fileInfo = getFileInfo(doc);
+                                            return (
+                                                <div key={docIndex} className='col'>
+                                                    <div className='card border h-100'>
+                                                        <div className='card-body p-2'>
+                                                            <div className='d-flex align-items-center mb-1'>
+                                                                <Icon 
+                                                                    icon={fileInfo.icon} 
+                                                                    width={16} 
+                                                                    className='me-1 text-primary'
+                                                                />
+                                                                <small className='text-muted'>Doc {docIndex + 1}</small>
+                                                            </div>
+                                                            {fileInfo.isImage ? (
+                                                                <Link to={doc} target='_blank' className='d-block'>
+                                                                    <img 
+                                                                        src={doc} 
+                                                                        alt={`Document ${docIndex + 1}`} 
+                                                                        className="img-fluid rounded" 
+                                                                        style={{ maxHeight: '100px', width: '100%', objectFit: 'cover' }}
+                                                                    />
+                                                                </Link>
+                                                            ) : (
+                                                                <div className='text-center py-2'>
+                                                                    <Icon 
+                                                                        icon={fileInfo.icon} 
+                                                                        width={24} 
+                                                                        className='text-muted mb-1'
+                                                                    />
+                                                                    <div>
+                                                                        <small className='text-muted d-block'>.{fileInfo.extension?.toUpperCase()}</small>
+                                                                        <Link 
+                                                                            to={doc} 
+                                                                            target='_blank' 
+                                                                            className='btn btn-sm btn-outline-primary mt-1'
+                                                                            style={{ fontSize: '0.7rem' }}
+                                                                        >
+                                                                            View
+                                                                        </Link>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className='text-center py-2 text-muted'>
+                                        <Icon icon="mdi:file-document-outline" width={24} className='mb-1' />
+                                        <small>No documents uploaded</small>
+                                    </div>
+                                )}
                             </div>
+
                             <div className='d-flex justify-content-between'>
-                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-end me-1'>{service.isPaid ? <span>Paid</span> : <span>Payment Pending</span>}</div>
-                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-start ms-1'>{service.status.charAt(0).toUpperCase() + service.status.slice(1)}</div>
+                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-end me-1'>
+                                    {service.isPaid ? <span>Paid</span> : <span>Payment Pending</span>}
+                                </div>
+                                <div className='mb-3 text-success bg-info bg-opacity-25 my-bold p-2 px-3 rounded-start ms-1'>
+                                    {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
+                                </div>
                             </div>
+                            
                             <div className='my-bold h6'>Service Provider:</div>
                             {service.serviceProvider &&
                                 <div>

@@ -5,6 +5,7 @@ import formatDate from '../../../utils/formatDate';
 import { Link } from 'react-router-dom';
 import { makeAuthPostReq } from '../../../utils/serverHelper';
 import toast from 'react-hot-toast';
+import { Icon } from '@iconify/react';
 
 export default function MyServiceReqs() {
     const { data: serviceReqs, loading, error } = UserFetchData('/serviceProvider/ServiceReqs/my-ServiceReqs');
@@ -22,7 +23,6 @@ export default function MyServiceReqs() {
         }
     }, [serviceReqs]);
 
-
     const openModal = async (service) => {
         await setSelectedService(service);
     };
@@ -31,9 +31,29 @@ export default function MyServiceReqs() {
         setSelectedService(null);
     };
 
+    // Function to get file type icon and determine if it's an image
+    const getFileInfo = (url) => {
+        const extension = url.split('.').pop()?.toLowerCase();
+        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension);
+        const isPdf = extension === 'pdf';
+        
+        let icon = "mdi:file-document-outline";
+        if (isImage) icon = "mdi:file-image-outline";
+        if (isPdf) icon = "mdi:file-pdf-box";
+        
+        return { isImage, icon, extension };
+    };
+
+    // Function to categorize documents based on service type
+    const categorizeDocuments = (documents, serviceName) => {
+        // For now, we'll show all documents together since we don't have category info in the backend
+        // In a real implementation, you might want to store category information with each document
+        return {
+            "Uploaded Documents": documents
+        };
+    };
 
     const ServiceTable = ({ serviceReqs }) => {
-        // console.log(serviceReqs);
         return (<div className="table-responsive">
             <table className='w-100 text-align-left'>
                 <thead className='bg-secondary bg-opacity-10'>
@@ -72,9 +92,7 @@ export default function MyServiceReqs() {
         </div>)
     }
 
-
     const handleServiceRequest = async (myText) => {
-        // console.log(myText);
         try {
             const response = await makeAuthPostReq("/notification/create", {
                 user: selectedService.client._id,
@@ -91,10 +109,7 @@ export default function MyServiceReqs() {
         }
     };
 
-
-
     const handleCancel = async (name) => {
-        // console.log(selectedService._id);
         try {
             const response = await makeAuthPostReq("/serviceProvider/cancel", { id: selectedService._id });
             if (response.success) {
@@ -155,7 +170,6 @@ export default function MyServiceReqs() {
                 </div>
             )}
 
-
             {approvedServiceReqs.length !== 0 && (
                 <div>
                     <h3 className='text-center iconText text-success mb-4'>Approved Service Requests</h3>
@@ -165,10 +179,9 @@ export default function MyServiceReqs() {
                 </div>
             )}
 
-
             {/* <!-- Modal --> */}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-dialog modal-dialog-centered modal-lg">
                     {selectedService && <div className="modal-content">
                         <div className="modal-header bg-info bg-opacity-25 shadow">
                             <h5 className='modal-title fw-bold myText' id="exampleModalLabel"><span className='text-dark my-bold'>Service Name:</span>{" " + selectedService.serviceName}</h5>
@@ -176,28 +189,100 @@ export default function MyServiceReqs() {
                         </div>
                         <div className="modal-body bg-secondary bg-opacity-10 p-4">
                             <h6 className='mb-3 mt-2'>Service Request Date: <span className='iconText text-success h5'>{formatDate(selectedService.serviceDate)}</span></h6>
-                            <div className='mb-3'>
-                                <h6 className='mb-2'>Provided Documents:</h6>
-                                <div className='row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 mb-3'>
-                                    {selectedService.documents.map((doc, index) => (
-                                        <figure key={index} className='col mb-2'>
-                                            <Link to={doc} target='_blank'><img src={doc} alt={`Document ${index}`} className="img-fluid" /></Link>
-                                        </figure>
-                                    ))}
-                                </div>
+                            
+                            {/* Documents Section */}
+                            <div className='mb-4'>
+                                <h6 className='mb-3 d-flex align-items-center'>
+                                    <Icon icon="mdi:file-document-multiple" className='me-2' />
+                                    Client Documents ({selectedService.documents.length})
+                                </h6>
+                                {selectedService.documents.length > 0 ? (
+                                    <div className='row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-3'>
+                                        {selectedService.documents.map((doc, index) => {
+                                            const fileInfo = getFileInfo(doc);
+                                            return (
+                                                <div key={index} className='col'>
+                                                    <div className='card border h-100'>
+                                                        <div className='card-body p-3'>
+                                                            <div className='d-flex align-items-center mb-2'>
+                                                                <Icon 
+                                                                    icon={fileInfo.icon} 
+                                                                    width={20} 
+                                                                    className='me-2 text-primary'
+                                                                />
+                                                                <small className='text-muted'>Document {index + 1}</small>
+                                                            </div>
+                                                            {fileInfo.isImage ? (
+                                                                <Link to={doc} target='_blank' className='d-block'>
+                                                                    <img 
+                                                                        src={doc} 
+                                                                        alt={`Document ${index + 1}`} 
+                                                                        className="img-fluid rounded" 
+                                                                        style={{ maxHeight: '150px', width: '100%', objectFit: 'cover' }}
+                                                                    />
+                                                                </Link>
+                                                            ) : (
+                                                                <div className='text-center py-3'>
+                                                                    <Icon 
+                                                                        icon={fileInfo.icon} 
+                                                                        width={40} 
+                                                                        className='text-muted mb-2'
+                                                                    />
+                                                                    <div>
+                                                                        <small className='text-muted d-block'>.{fileInfo.extension?.toUpperCase()}</small>
+                                                                        <Link 
+                                                                            to={doc} 
+                                                                            target='_blank' 
+                                                                            className='btn btn-sm btn-outline-primary mt-2'
+                                                                        >
+                                                                            View Document
+                                                                        </Link>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className='text-center py-3 text-muted'>
+                                        <Icon icon="mdi:file-document-outline" width={40} className='mb-2' />
+                                        <p>No documents provided</p>
+                                    </div>
+                                )}
                             </div>
+
+                            {/* Client Information */}
                             <div>
-                                <h6 className='text-success text-para my-3'>Requested by:</h6>
+                                <h6 className='text-success text-para my-3 d-flex align-items-center'>
+                                    <Icon icon="mdi:account" className='me-2' />
+                                    Requested by:
+                                </h6>
                                 <h5 className='mb-3 text-danger iconText'>{selectedService.client.name}</h5>
-                                <p>Email: <span className='my-bold'>{selectedService.client.email}</span></p>
-                                <p>Contact Number : <span className='my-bold'>{selectedService.client.phone}</span></p>
-                                <p>Address: <span className='my-bold'>{selectedService.client.address}</span></p>
+                                <div className='row'>
+                                    <div className='col-md-6'>
+                                        <p><Icon icon="mdi:email" className='me-2' />Email: <span className='my-bold'>{selectedService.client.email}</span></p>
+                                    </div>
+                                    <div className='col-md-6'>
+                                        <p><Icon icon="mdi:phone" className='me-2' />Contact: <span className='my-bold'>{selectedService.client.phone}</span></p>
+                                    </div>
+                                </div>
+                                <p><Icon icon="mdi:map-marker" className='me-2' />Address: <span className='my-bold'>{selectedService.client.address}</span></p>
                             </div>
-                            <div className='d-flex gap-3 align-items-center'>
-                                <div>Fees: <span className='my-bold'> Rs. {selectedService.fees} /-</span></div>
+
+                            {/* Payment Information */}
+                            <div className='d-flex gap-3 align-items-center mt-3 p-3 bg-light rounded'>
+                                <div className='d-flex align-items-center'>
+                                    <Icon icon="mdi:currency-inr" className='me-1' />
+                                    Fees: <span className='my-bold ms-1'> Rs. {selectedService.fees} /-</span>
+                                </div>
                                 <div className='d-flex align-items-center gap-2'>
                                     <div className={`rounded-circle ${selectedService.isPaid ? 'bg-success' : 'bg-danger'}`} style={{ width: "10px", height: "10px" }}></div>
-                                    {selectedService.isPaid ? 'Paid' : 'Pending'}
+                                    <span className={selectedService.isPaid ? 'text-success' : 'text-danger'}>
+                                        {selectedService.isPaid ? 'Paid' : 'Pending'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
