@@ -5,7 +5,7 @@ import { BsArrowRight } from 'react-icons/bs';
 
 const serviceProviderCard = ({ serviceProvider }) => {
     return (
-        <div className='px-2'>
+        <div className='px-2 pt-3 d-flex flex-column justify-content-between h-100'>
             <div>
                 <img src={serviceProvider.photo} className="w-100 rounded-top" alt={serviceProvider.name} style={{maxHeight: "290px"}}/>
             </div>
@@ -37,7 +37,7 @@ const serviceProviderCard = ({ serviceProvider }) => {
                         At {serviceProvider.organisation}
                     </p>
                 </div>
-                <Link to={"/serviceProvider/" + serviceProvider._id} className="btn btn-outline-danger rounded-circle h-100 d-flex align-items-center">
+                <Link to={"/serviceProvider/" + serviceProvider._id} className="btn btn-outline-danger rounded-circle d-flex align-items-center">
                     <BsArrowRight className='arrow mx-0'/>
                 </Link>
             </div>

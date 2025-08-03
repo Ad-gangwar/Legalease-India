@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Layout from './Layout/Layout';
 import LawyerImg from '../assets/images/lawyer-01.jpg'
@@ -255,65 +255,29 @@ export default function Home() {
               ))}
             </div>
             <div className='col-md-4 d-flex align-items-center justify-content-center'>
-              <img src="https://www.bytestechnolab.com/wp-content/uploads/2022/12/magento-development-service.webp" alt='faqs' className='img-fluid w-100' style={{maxWidth: "400px"}}></img>
+              <img src="https://www.bytestechnolab.com/wp-content/uploads/2022/12/magento-development-service.webp" alt='faqs' className='img-fluid w-100' style={{ maxWidth: "400px" }}></img>
             </div>
           </div>
         </div>
       </section>
 
       {/* below carousel of external websites */}
-      <section className="wrapper carousel-wrapper">
-        <h1 style={{ display: 'none' }}>Section</h1>
-        <div
-          id="carouselExample"
-          className="carousel slide"
-          data-bs-ride="false"
-          data-bs-interval="false"
-        >
-          <div className="carousel-inner container">
-            {[0, 1, 2].map((groupIndex) => (
-              <div key={groupIndex} className={`carousel-item ${groupIndex === 0 ? 'active' : ''}`}>
-                <div className="d-flex justify-content-around">
-                  {images.map((image, index) => (
-                    <Link
-                      key={index}
-                      to={image.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      role="link"
-                    >
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        title={image.title}
-                        draggable={false}
-                        width={200}
-                        height={150}
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExample"
-            data-bs-slide="prev"
-          >
-            <span aria-hidden="true"><Icon icon="fa-solid:chevron-left" width={30} color='black' /></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExample"
-            data-bs-slide="next"
-          >
-            <span aria-hidden="true"><Icon icon="fa-solid:chevron-right" width={30} color='black' /></span>
-            <span className="visually-hidden">Next</span>
-          </button>
+      <section className='container overflow-hidden'>
+        <div className='d-flex scrollX'>
+          {images?.map((image, index) => (
+            <figure>
+              <Link to={image.link} target='_blank'>
+                <img src={image.src} />
+              </Link>
+            </figure>
+          ))}
+          {images?.map((image, index) => (
+            <figure>
+              <Link to={image.link} target='_blank'>
+                <img src={image.src} />
+              </Link>
+            </figure>
+          ))}
         </div>
       </section>
     </Layout>

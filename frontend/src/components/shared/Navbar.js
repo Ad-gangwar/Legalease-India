@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import digitalIndia from '../../assets/images/digital-india.png';
-import Bell from '../../assets/images/bell.gif';
 import Bell2 from '../../assets/images/bell2.gif';
+import { makeAuthGetReq } from '../../utils/serverHelper';
 
 
 export default function Navbar() {
     const [token, setToken] = useState(null);
-
     const [user, setUser] = useState({});
+    const [notifications, setNotifications] = useState([]);
+    const location = useLocation();
 
     let navigate = useNavigate();
 
@@ -23,12 +24,39 @@ export default function Navbar() {
         setToken(localStorage.getItem("legalToken"));
     }, []);
 
-    // State to track hover status
-    const [isHovered, setIsHovered] = useState(false);
+    // Fetch notifications when user is logged in
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            if (token) {
+                try {
+                    const response = await makeAuthGetReq("/notification/getAll");
+                    if (response.success) {
+                        setNotifications(response.data);
+                    }
+                } catch (error) {
+                    console.error("Error fetching notifications:", error);
+                }
+            }
+        };
 
-    // Function to handle hover
-    const handleHover = () => {
-        setIsHovered(!isHovered);
+        fetchNotifications();
+    }, [token]);
+
+
+
+    // Function to check if a link is active
+    const isActive = (path) => {
+        return location.pathname === path;
+    };
+
+    // Function to get active class
+    const getActiveClass = (path) => {
+        return isActive(path) ? 'text-white' : '';
+    };
+
+    // Function to get active style
+    const getActiveStyle = (path) => {
+        return isActive(path) ? { backgroundColor: '#9a1919' } : {};
     };
 
     return (
@@ -77,53 +105,64 @@ export default function Navbar() {
                             <div className='d-flex'>
                                 <ul className='navbar-nav'>
                                     <li className='nav-item border border-dark border-1 border-top-0'>
-                                        {token ? <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to={user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me'}>
+                                        {token ? <Link className={`nav-link d-flex align-items-center px-3 ${getActiveClass(user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me')}`} style={getActiveStyle(user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me')} aria-current='page' to={user.role === 'client' ? '/clients/profile/me' : '/serviceProviders/profile/me'}>
                                             <span><Icon icon='ic:baseline-account-circle' width={30} className='me-1' /></span> My Account
-                                        </Link> : <Link className='nav-link hoverBox d-flex align-items-center px-3' aria-current='page' to='/signup'>
+                                        </Link> : <Link className={`nav-link d-flex align-items-center px-3 ${getActiveClass('/signup')}`} style={getActiveStyle('/signup')} aria-current='page' to='/signup'>
                                             Sign up
                                         </Link>}
                                     </li>
                                     {!token && (<li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox d-flex h-100 align-items-center px-3' aria-current='page' to='/login'>
+                                        <Link className={`nav-link d-flex h-100 align-items-center px-3 ${getActiveClass('/login')}`} style={getActiveStyle('/login')} aria-current='page' to='/login'>
                                             Login
                                         </Link>
                                     </li>)}
 
-                                    {token && (<li className='nav-item border border-dark border-1 border-top-0 ' onMouseEnter={handleHover}
-                                        onMouseLeave={handleHover}>
-                                        <Link className='nav-link hoverBox d-flex h-100 align-items-center px-2' aria-current='page' to='/notifications'>
-                                            <img
-                                                src={isHovered ? Bell : Bell2}
-                                                style={{ maxWidth: "33px" }}
-                                                className='h-100'
-                                                alt="Bell"
-                                            />
+                                    {token && (<li className='nav-item border border-dark border-1 border-top-0 '>
+                                        <Link className={`nav-link d-flex h-100 align-items-center px-2 ${getActiveClass('/notifications')}`} style={getActiveStyle('/notifications')} aria-current='page' to='/notifications'>
+                                            {notifications.length > 0 ? (
+                                                <img
+                                                    src={Bell2}
+                                                    style={{ 
+                                                        maxWidth: "30px",
+                                                        filter: isActive('/notifications') ? 'brightness(0) invert(1)' : 'none'
+                                                    }}
+                                                    className='h-100'
+                                                    alt="Bell"
+                                                />
+                                            ) : (
+                                                <Icon 
+                                                    icon="mdi:bell-outline" 
+                                                    width={30} 
+                                                    color={isActive('/notifications') ? 'white' : 'black'}
+                                                    className='h-100'
+                                                />
+                                            )}
                                             <span className='ps-2'>Notifications</span>
                                         </Link>
                                     </li>)}
 
                                     <li className='nav-item border border-dark border-1 border-top-0'>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' aria-current='page' to='/services'>
+                                        <Link className={`nav-link h-100 d-flex align-items-center px-3 ${getActiveClass('/services')}`} style={getActiveStyle('/services')} aria-current='page' to='/services'>
                                             Services
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0'>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' aria-current='page' to='/serviceProviders'>
+                                        <Link className={`nav-link h-100 d-flex align-items-center px-3 ${getActiveClass('/serviceProviders')}`} style={getActiveStyle('/serviceProviders')} aria-current='page' to='/serviceProviders'>
                                             Service Providers
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' aria-current='page' to='/about'>
+                                        <Link className={`nav-link h-100 d-flex align-items-center px-3 ${getActiveClass('/about')}`} style={getActiveStyle('/about')} aria-current='page' to='/about'>
                                             About Us
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' to='/contact'>
+                                        <Link className={`nav-link h-100 d-flex align-items-center px-3 ${getActiveClass('/contact')}`} style={getActiveStyle('/contact')} to='/contact'>
                                             Contact Us
                                         </Link>
                                     </li>
                                     <li className='nav-item border border-dark border-1 border-top-0 '>
-                                        <Link className='nav-link hoverBox h-100 d-flex align-items-center px-3' to='/help'>
+                                        <Link className={`nav-link h-100 d-flex align-items-center px-3 ${getActiveClass('/help')}`} style={getActiveStyle('/help')} to='/help'>
                                             Help
                                         </Link>
                                     </li>

@@ -19,6 +19,9 @@ import Cancel from './components/Cancel';
 import Success from './components/Success';
 import Help from './components/Help';
 
+
+// add to your react component
+
 export default function App() {
   const [selectedServiceProvider, setSelectedServiceProvider] = useState(null);
 
@@ -33,7 +36,7 @@ export default function App() {
         },
       }} />
       <BrowserRouter>
-        <serviceProviderContext.Provider value={{ selectedServiceProvider, setSelectedServiceProvider}}>
+        <serviceProviderContext.Provider value={{ selectedServiceProvider, setSelectedServiceProvider }}>
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='/login' element={<Login />}></Route>

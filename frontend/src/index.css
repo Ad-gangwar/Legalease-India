@@ -10,10 +10,6 @@ code {
     monospace;
 }
 
-.nav-link{
-  color: black !important;
-}
-
 .iconText {
   font-weight: 600;
 }
@@ -40,8 +36,6 @@ code {
 
 .hoverBox:hover {
   cursor: pointer;
-  background-color: #9a1919;
-  color: white !important;
 }
 
 .mainText {
@@ -182,6 +176,23 @@ code {
   animation-play-state: paused;
 }
 
+@keyframes scrollX{
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.scrollX {
+  animation: scrollX 12s linear infinite;
+}
+
+.scrollX:hover {
+  animation-play-state: paused;
+}
+
 .swiper-pagination-bullet {
   width: 12px !important;
   height: 12px !important;
@@ -196,6 +207,13 @@ code {
 
 .swiper{
   padding-bottom: 70px !important;
+}
+
+.swiper-slide{
+  display:flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  justify-content: space-between !important;
 }
 
 .swiper-slide.swiper-slide-next{

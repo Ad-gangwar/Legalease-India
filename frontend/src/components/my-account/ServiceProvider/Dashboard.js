@@ -11,13 +11,13 @@ import { URL } from '../../../utils/config';
 import toast from 'react-hot-toast';
 
 export default function MyAccount() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [tab, setTab] = useState('overview');
   const { data: userData, loading, error } = userGetProfile('/serviceProvider/profile/me');
   const token = localStorage.getItem("userToken")
   //  console.log(userData)
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     // Remove data from localStorage
     await localStorage.removeItem("legalToken");
     await localStorage.removeItem("legalUser");
@@ -76,7 +76,7 @@ export default function MyAccount() {
                     <button className="w-100 btn btn-dark btn-lg rounded" onClick={handleLogout}>
                       Logout
                     </button>
-                    <button className="w-100 btn btn-danger btn-lg rounded mt-3" onClick={handleDelete}>
+                    <button className="w-100 btn btn-danger btn-lg rounded mt-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                       Delete Account
                     </button>
                   </section>
@@ -89,6 +89,24 @@ export default function MyAccount() {
               </div>
             </div>
           )}
+        </div>
+
+        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header py-2">
+                <h1 className="modal-title text-danger fs-5 iconText" id="staticBackdropLabel">Warning!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p className='my-bold my-3' >Are you sure you want to delete your account?</p>
+              </div>
+              <div className="modal-footer py-1">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" className="btn btn-danger" onClick={handleDelete} data-bs-dismiss="modal">Delete</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </Layout>

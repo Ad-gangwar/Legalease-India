@@ -10,10 +10,10 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 export default function MyAccount() {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [tab, setTab] = useState('serviceReqs');
     const { data: userData, loading, error } = clientGetProfile('/client/profile/me');
-    const token =localStorage.getItem("legalToken");
+    const token = localStorage.getItem("legalToken");
 
     const handleLogout = () => {
         // Remove data from localStorage
@@ -73,7 +73,7 @@ export default function MyAccount() {
                                     <button className="w-100 btn btn-secondary btn-lg rounded" onClick={handleLogout}>
                                         Logout
                                     </button>
-                                    <button className="w-100 btn btn-danger btn-lg rounded mt-3" onClick={handleDelete}>Delete Account</button>
+                                    <button className="w-100 btn btn-danger btn-lg rounded mt-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Account</button>
                                 </div>
                             </div>
 
@@ -97,6 +97,24 @@ export default function MyAccount() {
                             </div>
                         </div>
                     )}
+                </div>
+
+                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header py-2">
+                                <h1 className="modal-title text-danger fs-5 iconText" id="staticBackdropLabel">Warning!</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className='my-bold my-3' >Are you sure you want to delete your account?</p>
+                            </div>
+                            <div className="modal-footer py-1">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" className="btn btn-danger" onClick={handleDelete} data-bs-dismiss="modal">Delete</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </Layout>
