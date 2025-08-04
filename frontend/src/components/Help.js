@@ -1,101 +1,260 @@
 import React, { useState } from 'react';
 import HelpImage from '../assets/images/help-image.png';
 import Layout from './Layout/Layout';
-import { faqs } from '../assets/data/faqs';
+import { Icon } from '@iconify/react';
+import FAQs from './shared/FAQs';
 
 export default function Help() {
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-    const handleQuestionClick = (index) => {
-        setSelectedQuestion(selectedQuestion === index ? null : index);
-    };
+    const steps = [
+        {
+            icon: "mdi:search-web",
+            title: "Browse Services",
+            description: "Explore our comprehensive range of legal services and select the category that meets your needs."
+        },
+        {
+            icon: "mdi:format-list-bulleted",
+            title: "Choose Service",
+            description: "Review the available services under your selected category and pick the specific service you require."
+        },
+        {
+            icon: "mdi:account-tie",
+            title: "Select Provider",
+            description: "Choose from our network of qualified legal service providers based on their expertise and ratings."
+        },
+        {
+            icon: "mdi:file-document-multiple",
+            title: "Upload Documents",
+            description: "Carefully read the requirements and upload the necessary documents for your service request."
+        },
+        {
+            icon: "mdi:credit-card",
+            title: "Make Payment",
+            description: "Complete the payment process using our secure payment gateway with your preferred method."
+        },
+        {
+            icon: "mdi:check-circle",
+            title: "Get Confirmation",
+            description: "Receive confirmation of your successful payment and service request submission."
+        },
+        {
+            icon: "mdi:home",
+            title: "Return Home",
+            description: "Navigate back to the homepage to track your service request or explore other services."
+        },
+        {
+            icon: "mdi:bell-ring",
+            title: "Stay Updated",
+            description: "Receive notifications when your service provider responds to your request."
+        }
+    ];
+
     return (
         <Layout>
-            <section className='my-5'>
+            {/* Hero Section */}
+            <section className='py-5' style={{ backgroundColor: '#fff9ea' }}>
                 <div className='container'>
-                    <div className='d-flex flex-column mb-4 text-center'>
-                        <h1 className='mainText iconText display-5'>Seamless Legal Support </h1>
-                        <h5 className='iconText my-2 pb-1'>Navigate Our Services with Ease</h5>
-                    </div>
-                    <div className='row'>
-                        <div className='col-md-8 mb-4'>
-                        <h4 className='iconText mb-4'>Instructions to use the website: </h4>
-                            <ul className='list-unstyled ps-3 my-3'>
-                                <li className='text-para my-3'>
-                                    1. Browse through the services and select the service category you want.
-                                </li>
-                                <li className='text-para my-3'>
-                                    2. The services list under the selected category will appear. Now select the service to be taken.
-                                </li>
-                                <li className='text-para my-3'>
-                                    3. The information regarding that service will appear. Select the service provider to continue.
-                                </li>
-                                <li className='text-para my-3'>
-                                    4. Read the instructions carefully and provide the needed documents.
-                                </li>
-                                <li className='text-para my-3'>
-                                    5. Click on the service request button to navigate to the payment page to pay for the service.
-                                </li>
-                                <li className='text-para my-3'>
-                                    6. Enter your card detais and click on pay to pay for the fees.
-                                </li>
-                                <li className='text-para my-3'>
-                                    7. It will take to the success page if the payment was done successfully.
-                                </li>
-                                <li className='text-para my-3'>
-                                    8. Click on the return to homepage button to return back to the homepage.
-                                </li>
-                            </ul>
-                            <p className='text-para my-bold mt-4'>Your service request has been sent to the selected Service Provider. The service provider will review your request and you will be notified when the service provider responds to your request.</p>
+                    <div className='row align-items-center'>
+                        <div className='col-lg-6'>
+                            <div className='text-center text-lg-start'>
+                                <h1 className='display-4 fw-bold text-danger mb-3'>
+                                    Need Help?
+                                </h1>
+                                <h2 className='h3 text-dark mb-4'>
+                                    We're here to guide you through every step of your legal journey
+                                </h2>
+                                <p className='lead text-muted mb-4'>
+                                    Get comprehensive support and answers to all your questions about our legal services platform.
+                                </p>
+                                <div className='d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start'>
+                                    <div className='d-flex align-items-center bg-white p-3 rounded shadow-sm'>
+                                        <Icon icon="mdi:clock-outline" className='text-primary me-2' width={24} />
+                                        <span className='fw-bold'>24/7 Support</span>
+                                    </div>
+                                    <div className='d-flex align-items-center bg-white p-3 rounded shadow-sm'>
+                                        <Icon icon="mdi:shield-check" className='text-success me-2' width={24} />
+                                        <span className='fw-bold'>Secure Platform</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className='col-md-4 text-center'>
-                            <img src={HelpImage} style={{ maxWidth: "450px" }} className='img-fluid' alt='Help'></img>
+                        <div className='col-lg-6 text-center'>
+                            <div className='help-image-container position-relative'>
+                                {/* Main image with enhanced styling */}
+                                <div className='image-wrapper position-relative'>
+                                    <img 
+                                        src={HelpImage} 
+                                        alt='Legal Help & Support' 
+                                        className='img-fluid rounded-lg shadow-lg p-4 pb-0 bg-white'
+                                        style={{ 
+                                            maxWidth: '450px',
+                                            border: '3px solid #dc3545',
+                                            borderRadius: '15px'
+                                        }}
+                                    />
+                                    
+                                    {/* Overlay with help icon */}
+                                    <div className='position-absolute top-0 start-0 m-3'>
+                                        <div className='help-badge d-flex align-items-center justify-content-center'
+                                             style={{ 
+                                                 width: '50px', 
+                                                 height: '50px', 
+                                                 backgroundColor: '#dc3545',
+                                                 borderRadius: '50%',
+                                                 boxShadow: '0 4px 15px rgba(220, 53, 69, 0.3)'
+                                             }}>
+                                            <Icon icon="mdi:help-circle" className='text-white' width={24} />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Support features below image */}
+                                <div className='support-features mt-4'>
+                                    <div className='row g-3 justify-content-center'>
+                                        <div className='col-auto'>
+                                            <div className='d-flex align-items-center bg-white p-2 rounded shadow-sm'>
+                                                <Icon icon="mdi:clock-outline" className='text-primary me-2' width={18} />
+                                                <small className='fw-bold'>24/7 Support</small>
+                                            </div>
+                                        </div>
+                                        <div className='col-auto'>
+                                            <div className='d-flex align-items-center bg-white p-2 rounded shadow-sm'>
+                                                <Icon icon="mdi:shield-check" className='text-success me-2' width={18} />
+                                                <small className='fw-bold'>Secure</small>
+                                            </div>
+                                        </div>
+                                        <div className='col-auto'>
+                                            <div className='d-flex align-items-center bg-white p-2 rounded shadow-sm'>
+                                                <Icon icon="mdi:account-group" className='text-info me-2' width={18} />
+                                                <small className='fw-bold'>Expert Team</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* ----------------------------Faqs section---------------------- */}
-            <section className='sbg pt-1'>
-                <div className="mt-4 p-4 pb-0 rounded">
-                    <h2 className="text-center iconText mainText display-6 mb-4">Frequently Asked Questions</h2>
-                    <div className='row'>
-                        <div className="accordion mt-4 col-md-8">
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="accordion-item" style={{ width: '90%', margin: 'auto' }}>
-                                    <h2 className="accordion-header" id={`faqHeading${index}`}>
-                                        <button
-                                            className={`accordion-button ${selectedQuestion === index ? '' : 'collapsed'}`}
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#faqCollapse${index}`}
-                                            aria-expanded={selectedQuestion === index}
-                                            aria-controls={`faqCollapse${index}`}
-                                            onClick={() => handleQuestionClick(index)}
-                                            style={{ backgroundColor: '#f8f9fa', border: 'none' }}
-                                        >
-                                            {faq.question}
-                                        </button>
-                                    </h2>
-                                    <div
-                                        id={`faqCollapse${index}`}
-                                        className={`accordion-collapse collapse ${selectedQuestion === index ? 'show' : ''}`}
-                                        aria-labelledby={`faqHeading${index}`}
-                                        data-bs-parent="#accordionExample"
-                                    >
-                                        <div className="accordion-body">
-                                            {faq.content}
+            {/* How It Works Section */}
+            <section className='py-5'>
+                <div className='container'>
+                    <div className='text-center mb-5'>
+                        <h2 className='iconText myText display-5 mb-3'>How It Works?</h2>
+                        <p className='text-para'>Follow these simple steps to get started with our legal services</p>
+                    </div>
+                    
+                    <div className='timeline-container'>
+                        <div className='row'>
+                            {steps.map((step, index) => (
+                                <div key={index} className='col-lg-6 col-md-12 mb-4'>
+                                    <div className='timeline-item d-flex align-items-center'>
+                                        {/* Timeline line for desktop */}
+                                        <div className='timeline-line d-none d-lg-block position-relative me-4'>
+                                            <div className='timeline-dot d-flex align-items-center justify-content-center'
+                                                 style={{ 
+                                                     width: '60px', 
+                                                     height: '60px', 
+                                                     backgroundColor: '#dc3545',
+                                                     borderRadius: '50%',
+                                                     boxShadow: '0 4px 15px rgba(220, 53, 69, 0.3)'
+                                                 }}>
+                                                <Icon icon={step.icon} className='text-white' width={28} />
+                                            </div>
+                                            {index < steps.length - 1 && (
+                                                <div className='timeline-connector position-absolute'
+                                                     style={{
+                                                         top: '60px',
+                                                         left: '50%',
+                                                         width: '2px',
+                                                         height: '60px',
+                                                         backgroundColor: '#dc3545',
+                                                         transform: 'translateX(-50%)'
+                                                     }}>
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        {/* Mobile timeline dot */}
+                                        <div className='timeline-dot-mobile d-lg-none me-3'>
+                                            <div className='d-flex align-items-center justify-content-center'
+                                                 style={{ 
+                                                     width: '50px', 
+                                                     height: '50px', 
+                                                     backgroundColor: '#dc3545',
+                                                     borderRadius: '50%',
+                                                     boxShadow: '0 4px 15px rgba(220, 53, 69, 0.3)'
+                                                 }}>
+                                                <Icon icon={step.icon} className='text-white' width={24} />
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Content */}
+                                        <div className='timeline-content flex-grow-1'>
+                                            <div className='card border-0 shadow-sm bg-white rounded p-4'>
+                                                <div className='d-flex align-items-center mb-3'>
+                                                    <div className='step-number me-3 d-flex align-items-center justify-content-center'
+                                                         style={{ 
+                                                             width: '35px', 
+                                                             height: '35px', 
+                                                             backgroundColor: '#fff9ea',
+                                                             borderRadius: '50%',
+                                                             border: '2px solid #dc3545',
+                                                             fontSize: '14px',
+                                                             fontWeight: 'bold',
+                                                             color: '#dc3545'
+                                                         }}>
+                                                        {index + 1}
+                                                    </div>
+                                                    <h5 className='card-title fw-bold mb-0 myText'>{step.title}</h5>
+                                                </div>
+                                                <p className='card-text text-para mb-0'>{step.description}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div className='col-md-4 d-flex align-items-center justify-content-center'>
-                            <img src="https://www.bytestechnolab.com/wp-content/uploads/2022/12/magento-development-service.webp" alt='faqs' className='img-fluid w-100' style={{ maxWidth: "400px" }}></img>
+                        
+                        {/* Mobile timeline connector */}
+                        <div className='d-lg-none text-center mt-3'>
+                            <div className='d-flex justify-content-center align-items-center'>
+                                {steps.map((_, index) => (
+                                    <div key={index} className='d-flex align-items-center'>
+                                        <div className='bg-danger rounded-circle' style={{ width: '8px', height: '8px' }}></div>
+                                        {index < steps.length - 1 && (
+                                            <div className='bg-danger mx-2' style={{ width: '30px', height: '2px', opacity: '0.3' }}></div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            {/* FAQ Section */}
+            <FAQs />
+
+            <style jsx>{`
+                .step-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+                }
+                
+                .step-card:hover .icon-container {
+                    transform: scale(1.05);
+                }
+                
+                .step-card {
+                    cursor: pointer;
+                }
+                
+                .icon-container {
+                    transition: transform 0.3s ease;
+                }
+            `}</style>
         </Layout>
     );
 }

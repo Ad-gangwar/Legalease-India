@@ -173,143 +173,268 @@ export default function DocumentService() {
         }
     };
 
-    // Function to get file type icon and determine if it's an image
-    const getFileInfo = (url) => {
-        const extension = url.split('.').pop()?.toLowerCase();
-        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension);
-        const isPdf = extension === 'pdf';
-        
-        let icon = "mdi:file-document-outline";
-        if (isImage) icon = "mdi:file-image-outline";
-        if (isPdf) icon = "mdi:file-pdf-box";
-        
-        return { isImage, icon, extension };
-    };
-
     return (
         <Layout>
-            {selectedDocument ? (<div className='container'>
-                {/* ---------------------needed document section----------------------------- */}
-                <section className='my-5 mb-3'>
-                    <div className='d-flex gap-3 align-items-center mb-4'>
-                        <span><h4>Select a Service Provider to continue: </h4></span>
-                        <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/serviceProviders')}>
-                            {loading ? <HashLoader size={35} color='white' /> : 'Select Service Provider'}
-                        </button>
-                        {selectedServiceProvider && <h5 className='my-bold'>{selectedServiceProvider.name}</h5>}
+            {selectedDocument ? (
+                <div className='container py-5'>
+                    {/* Header Section */}
+                    <div className='text-center mb-5'>
+                        <div className='d-flex justify-content-center align-items-center mb-3'>
+                            <div className='bg-danger rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '60px', height: '60px' }}>
+                                <Icon icon="mdi:file-document-multiple" className="text-white" width={30} />
+                            </div>
+                            <h2 className='fw-bold text-dark mb-0'>{name.replace(/([A-Z])/g, ' $1')}</h2>
+                        </div>
+                        <p className='text-muted fs-5'>Upload the required documents to proceed with your service request</p>
                     </div>
-                    <h2 className='text-center iconText myText'>Required Documents</h2>
-                    
-                    {/* Document Categories - 2 columns for lg screens */}
-                    <div className='w-100 mx-auto row row-cols-lg-2 row-cols-md-1'>
-                        {selectedDocument.map((item, index) => (
-                            <div className='p-4' key={index}>
-                                <div className='w-100 h-100 p-4 px-5 shadow-lg'>
-                                    <div className='d-flex align-items-center mb-3'>
-                                        <span className='d-inline-flex p-2 rounded-end my-bold' style={{ color: "#7c5300", backgroundColor: "#eadad973" }}>
-                                            {item.category}
-                                        </span>
-                                        {docs[item.category] && docs[item.category].length > 0 && (
-                                            <span className='ms-3 badge bg-success'>
-                                                ✓ {docs[item.category].length} document(s) uploaded
-                                            </span>
-                                        )}
-                                        {(!docs[item.category] || docs[item.category].length === 0) && (
-                                            <span className='ms-3 badge bg-danger'>
-                                                ⚠ Required
-                                            </span>
-                                        )}
-                                    </div>
-                                    
-                                    <div className='mb-3'>
-                                        <h6 className='mb-2'>Acceptable Documents:</h6>
-                                        <ul>
-                                            {item.documents.map((document, docIndex) => (
-                                                <li className='my-1' key={docIndex}>{document.name}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <span>Upload at least one document from this category (less than 250 KB each)</span>
-                                        <div className='mt-3'>
-                                            <input
-                                                type='file'
-                                                name='photo'
-                                                id={`customFile-${index}`}
-                                                onChange={(e) => handleFileInputChange(e, item.category)}
-                                                accept='.jpg, .png, .pdf'
-                                                className='cursor-pointer h-100 w-100'
-                                                multiple
-                                                disabled={uploading[item.category]}
+
+                    {/* Service Provider Selection Section */}
+                    <div className='card border-0 shadow-lg mb-5' style={{ borderRadius: '15px' }}>
+                        <div className='card-body p-4' style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' }}>
+                            <div className='d-flex justify-content-between align-items-center'>
+                                <div>
+                                    <h5 className='fw-semibold text-dark mb-1'>
+                                        <Icon icon="mdi:account-tie" className="me-2 text-danger" />
+                                        Service Provider Selection
+                                    </h5>
+                                    <p className='text-muted mb-0'>Choose a service provider to continue with your request</p>
+                                </div>
+                                <div className='d-flex align-items-center gap-3'>
+                                    {selectedServiceProvider && (
+                                        <div className='d-flex align-items-center'>
+                                            <img 
+                                                src={selectedServiceProvider.photo} 
+                                                className='rounded-circle me-2 shadow-sm' 
+                                                style={{ width: '40px', height: '40px', objectFit: 'cover' }} 
+                                                alt={selectedServiceProvider.name} 
                                             />
-                                            {uploading[item.category] && (
-                                                <div className='mt-2 text-center'>
-                                                    <HashLoader size={20} color='#dc3545' />
-                                                    <span className='ms-2'>Uploading...</span>
+                                            <span className='fw-semibold text-dark'>{selectedServiceProvider.name}</span>
+                                        </div>
+                                    )}
+                                    <button 
+                                        className='btn btn-danger rounded-pill px-4 py-2 shadow-sm' 
+                                        onClick={() => navigate('/serviceProviders')}
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <div className='d-flex align-items-center'>
+                                                <HashLoader size={20} color='white' />
+                                                <span className='ms-2'>Processing...</span>
+                                            </div>
+                                        ) : (
+                                            <div className='d-flex align-items-center'>
+                                                <Icon icon="mdi:account-search" className="me-2" />
+                                                {selectedServiceProvider ? 'Change Provider' : 'Select Provider'}
+                                            </div>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Required Documents Section */}
+                    <div className='mb-5'>
+                        <div className='text-center mb-4'>
+                            <h3 className='fw-bold text-dark mb-2'>
+                                <Icon icon="mdi:clipboard-list" className="me-2 text-danger" />
+                                Required Documents
+                            </h3>
+                            <p className='text-muted'>Please upload at least one document from each category below</p>
+                        </div>
+                        
+                        {/* Document Categories - 2 columns for lg screens */}
+                        <div className='row row-cols-lg-2 row-cols-md-1 g-4'>
+                            {selectedDocument.map((item, index) => (
+                                <div key={index}>
+                                    <div className='card border-0 shadow-lg h-100' style={{ borderRadius: '15px' }}>
+                                        <div className='card-body p-4'>
+                                            {/* Category Header */}
+                                            <div className='d-flex align-items-center justify-content-between mb-4'>
+                                                <div className='d-flex align-items-center'>
+                                                    <div className='bg-danger rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '40px', height: '40px' }}>
+                                                        <Icon icon="mdi:folder" className="text-white" width={20} />
+                                                    </div>
+                                                    <h5 className='fw-semibold text-dark mb-0'>{item.category}</h5>
+                                                </div>
+                                                {docs[item.category] && docs[item.category].length > 0 ? (
+                                                    <span className='badge bg-success fs-6 px-3 py-2 shadow-sm'>
+                                                        <Icon icon="mdi:check-circle" className="me-1" />
+                                                        {docs[item.category].length} document(s)
+                                                    </span>
+                                                ) : (
+                                                    <span className='badge bg-danger fs-6 px-3 py-2 shadow-sm'>
+                                                        <Icon icon="mdi:alert-circle" className="me-1" />
+                                                        Required
+                                                    </span>
+                                                )}
+                                            </div>
+                                            
+                                            {/* Acceptable Documents */}
+                                            <div className='mb-4'>
+                                                <h6 className='fw-semibold text-primary mb-3'>
+                                                    <Icon icon="mdi:file-document-outline" className="me-2" />
+                                                    Acceptable Documents:
+                                                </h6>
+                                                <div className='bg-light rounded p-3'>
+                                                    <ul className='mb-0'>
+                                                        {item.documents.map((document, docIndex) => (
+                                                            <li key={docIndex} className='mb-2 d-flex align-items-center'>
+                                                                <Icon icon="mdi:check-circle" className="text-success me-2" width={16} />
+                                                                <span className='text-dark'>{document.name}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* File Upload Section */}
+                                            <div className='mb-4'>
+                                                <div className='text-center p-4 border-2 border-dashed border-secondary rounded' style={{ borderStyle: 'dashed' }}>
+                                                    <Icon icon="mdi:cloud-upload" className="text-muted mb-3" width={48} />
+                                                    <p className='text-muted mb-3'>Upload at least one document from this category</p>
+                                                    <p className='small text-muted mb-3'>Maximum file size: 250 KB per file</p>
+                                                    <input
+                                                        type='file'
+                                                        name='photo'
+                                                        id={`customFile-${index}`}
+                                                        onChange={(e) => handleFileInputChange(e, item.category)}
+                                                        accept='.jpg, .png, .pdf'
+                                                        className='form-control'
+                                                        multiple
+                                                        disabled={uploading[item.category]}
+                                                    />
+                                                    {uploading[item.category] && (
+                                                        <div className='mt-3 text-center'>
+                                                            <HashLoader size={25} color='#dc3545' />
+                                                            <p className='text-muted mt-2 mb-0'>Uploading documents...</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Uploaded Documents Display */}
+                                            {docs[item.category] && docs[item.category].length > 0 && (
+                                                <div>
+                                                    <h6 className='fw-semibold text-success mb-3'>
+                                                        <Icon icon="mdi:check-circle" className="me-2" />
+                                                        Uploaded Documents ({docs[item.category].length})
+                                                    </h6>
+                                                    <div className='row g-2'>
+                                                        {docs[item.category].map((doc, docIndex) => (
+                                                            <div key={docIndex} className='col-12'>
+                                                                <div className='card border-0 bg-light shadow-sm'>
+                                                                    <div className='card-body p-3'>
+                                                                        <div className='d-flex align-items-center justify-content-between'>
+                                                                            <div className='d-flex align-items-center'>
+                                                                                <Icon 
+                                                                                    icon="mdi:file-document-outline" 
+                                                                                    width={24} 
+                                                                                    className='me-3 text-primary'
+                                                                                />
+                                                                                <div>
+                                                                                    <p className='fw-semibold mb-1 text-dark'>{doc.name}</p>
+                                                                                    <small className='text-success'>
+                                                                                        <Icon icon="mdi:check-circle" className="me-1" />
+                                                                                        Successfully uploaded
+                                                                                    </small>
+                                                                                </div>
+                                                                            </div>
+                                                                            <button
+                                                                                type='button'
+                                                                                className='btn btn-sm btn-outline-danger'
+                                                                                onClick={() => removeDocument(item.category, docIndex)}
+                                                                                title='Remove document'
+                                                                            >
+                                                                                <Icon icon="mdi:close" width={16} />
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
-                                        
-                                        {/* Display uploaded documents for this category */}
-                                        {docs[item.category] && docs[item.category].length > 0 && (
-                                            <div className='mt-4'>
-                                                <h6 className='mb-3'>Uploaded Documents for {item.category} ({docs[item.category].length})</h6>
-                                                <div className='row'>
-                                                    {docs[item.category].map((doc, docIndex) => (
-                                                        <div key={docIndex} className='col-md-6 col-lg-4 mb-3'>
-                                                            <div className='card border p-3 position-relative'>
-                                                                <div className='d-flex align-items-center'>
-                                                                    <Icon 
-                                                                        icon="mdi:file-document-outline" 
-                                                                        width={24} 
-                                                                        className='me-2 text-primary'
-                                                                    />
-                                                                    <div className='flex-grow-1'>
-                                                                        <small className='text-muted d-block'>{doc.name}</small>
-                                                                        <small className='text-success'>✓ Uploaded</small>
-                                                                    </div>
-                                                                    <button
-                                                                        type='button'
-                                                                        className='btn btn-sm btn-outline-danger ms-2'
-                                                                        onClick={() => removeDocument(item.category, docIndex)}
-                                                                        title='Remove document'
-                                                                    >
-                                                                        <Icon icon="mdi:close" width={16} />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </section>
 
-                {/* --------------------------------------Points to remember------------- */}
-                <section>
-                    <h2 className='iconText myText my-4'>Points to Remember</h2>
-                    <ul>
-                        {selectedDocumentPoints.map((point, index) => (
-                            <li key={index} className='my-3'>{point}</li>
-                        ))}
-                    </ul>
-                </section>
-                
-                <p className='my-4'><span className='my-bold'>Note: </span>This is test payment gateway of Stripe. Use <span className='iconText'>4000003560000008</span> as the card number to successfully complete the payment. Remember to copy it before proceeding to payment page.</p>
-                <button 
-                    className='btn btn-danger rounded-pill mx-auto d-block mt-4 mb-5 p-3 fs-5 my-bold px-5' 
-                    onClick={handleSubmit}
-                    disabled={loading || Object.values(uploading).some(uploading => uploading) || !validateDocuments()}
-                >
-                    {loading ? <HashLoader size={25} color='white' /> : 'Request Service'}
-                </button>
-            </div>) : <div className='text-center my-5 h2 py-4'>😒 Document Details not found!</div>}
+                    {/* Points to Remember Section */}
+                    <div className='card border-0 shadow-lg mb-5' style={{ borderRadius: '15px' }}>
+                        <div className='card-body p-4'>
+                            <div className='d-flex align-items-center mb-4'>
+                                <div className='bg-warning rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '50px', height: '50px' }}>
+                                    <Icon icon="mdi:lightbulb" className="text-white" width={25} />
+                                </div>
+                                <h3 className='fw-bold text-dark mb-0'>Points to Remember</h3>
+                            </div>
+                            <div className='row'>
+                                {selectedDocumentPoints.map((point, index) => (
+                                    <div key={index} className='col-md-6 mb-3'>
+                                        <div className='d-flex align-items-start'>
+                                            <Icon icon="mdi:check-circle" className="text-success me-2 mt-1" width={20} />
+                                            <p className='mb-0 text-dark'>{point}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Payment Note */}
+                    <div className='alert alert-info border-0 shadow-sm' style={{ borderRadius: '12px' }}>
+                        <div className='d-flex align-items-center'>
+                            <Icon icon="mdi:credit-card" className="me-3 text-info" width={24} />
+                            <div>
+                                <h6 className='fw-semibold mb-1'>Payment Information</h6>
+                                <p className='mb-0'>
+                                    This is a test payment gateway. Use <span className='fw-bold text-danger'>4000003560000008</span> as the card number to complete the payment successfully.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className='text-center'>
+                        <button 
+                            className='btn btn-danger btn-lg rounded-pill px-5 py-3 shadow-lg' 
+                            onClick={handleSubmit}
+                            disabled={loading || Object.values(uploading).some(uploading => uploading) || !validateDocuments()}
+                            style={{ fontSize: '1.1rem' }}
+                        >
+                            {loading ? (
+                                <div className='d-flex align-items-center'>
+                                    <HashLoader size={25} color='white' />
+                                    <span className='ms-3'>Processing Request...</span>
+                                </div>
+                            ) : (
+                                <div className='d-flex align-items-center'>
+                                    <Icon icon="mdi:send" className="me-2" />
+                                    Request Service
+                                </div>
+                            )}
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className='container py-5'>
+                    <div className='text-center'>
+                        <div className='bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4' style={{ width: '100px', height: '100px' }}>
+                            <Icon icon="mdi:file-document-off" className="text-muted" width={50} />
+                        </div>
+                        <h2 className='fw-bold text-muted mb-3'>Document Details Not Found</h2>
+                        <p className='text-muted fs-5'>The requested document service could not be found.</p>
+                        <button className='btn btn-danger rounded-pill px-4 py-2' onClick={() => navigate('/services')}>
+                            <Icon icon="mdi:arrow-left" className="me-2" />
+                            Back to Services
+                        </button>
+                    </div>
+                </div>
+            )}
         </Layout>
     )
 }

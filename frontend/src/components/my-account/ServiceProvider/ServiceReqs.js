@@ -23,6 +23,7 @@ export default function MyServiceReqs() {
         }
     }, [serviceReqs]);
 
+
     const openModal = async (service) => {
         await setSelectedService(service);
     };
@@ -42,15 +43,6 @@ export default function MyServiceReqs() {
         if (isPdf) icon = "mdi:file-pdf-box";
         
         return { isImage, icon, extension };
-    };
-
-    // Function to categorize documents based on service type
-    const categorizeDocuments = (documents, serviceName) => {
-        // For now, we'll show all documents together since we don't have category info in the backend
-        // In a real implementation, you might want to store category information with each document
-        return {
-            "Uploaded Documents": documents
-        };
     };
 
     const ServiceTable = ({ serviceReqs }) => {
@@ -92,6 +84,7 @@ export default function MyServiceReqs() {
         </div>)
     }
 
+
     const handleServiceRequest = async (myText) => {
         try {
             const response = await makeAuthPostReq("/notification/create", {
@@ -108,6 +101,8 @@ export default function MyServiceReqs() {
             console.error("Error creating notification:", error);
         }
     };
+
+
 
     const handleCancel = async (name) => {
         try {
@@ -170,6 +165,7 @@ export default function MyServiceReqs() {
                 </div>
             )}
 
+
             {approvedServiceReqs.length !== 0 && (
                 <div>
                     <h3 className='text-center iconText text-success mb-4'>Approved Service Requests</h3>
@@ -178,6 +174,7 @@ export default function MyServiceReqs() {
                     )}
                 </div>
             )}
+
 
             {/* <!-- Modal --> */}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -194,7 +191,7 @@ export default function MyServiceReqs() {
                             <div className='mb-4'>
                                 <h6 className='mb-3 d-flex align-items-center'>
                                     <Icon icon="mdi:file-document-multiple" className='me-2' />
-                                    Client Documents ({selectedService.documents.length})
+                                    Provided Documents ({selectedService.documents.length})
                                 </h6>
                                 {selectedService.documents.length > 0 ? (
                                     <div className='row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-3'>
