@@ -3,7 +3,7 @@ import Input from '../../shared/Input';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
 import HashLoader from 'react-spinners/HashLoader';
 import toast from 'react-hot-toast';
-import { URL } from '../../../utils/config';
+const URL = process.env.REACT_APP_URL;
 
 export default function Profile({ user }) {
     const [email, setEmail] = useState("");

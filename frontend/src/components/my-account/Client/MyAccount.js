@@ -5,9 +5,9 @@ import clientGetProfile from '../../../hooks/userFetchData';
 import Loading from '../../Loader/Loading';
 import Error from '../../Error/Error';
 import Layout from '../../Layout/Layout';
-import { URL } from '../../../utils/config';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+const URL = process.env.REACT_APP_URL;
 
 export default function MyAccount() {
     const navigate = useNavigate();

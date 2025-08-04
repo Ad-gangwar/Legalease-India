@@ -7,8 +7,8 @@ import Layout from '../../Layout/Layout';
 import ServiceReqs from './ServiceReqs';
 import Overview from './Overview';
 import { useNavigate } from 'react-router-dom';
-import { URL } from '../../../utils/config';
 import toast from 'react-hot-toast';
+const URL = process.env.REACT_APP_URL;
 
 export default function MyAccount() {
   const navigate = useNavigate();

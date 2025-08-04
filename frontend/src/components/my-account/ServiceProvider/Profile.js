@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import uploadImgToCloudinary from '../../../utils/Cloudinary_Upload';
 import toast from 'react-hot-toast';
 import HashLoader from 'react-spinners/HashLoader';
-import { URL } from '../../../utils/config';
+const URL = process.env.REACT_APP_URL;
 
 export default function Profile({ serviceProvider }) {
   const [qualificationForms, setQualificationForms] = useState([]);

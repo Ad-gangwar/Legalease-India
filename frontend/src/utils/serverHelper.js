@@ -1,4 +1,4 @@
-import { URL } from "./config";
+const URL = process.env.REACT_APP_URL;
 
 // Function to make an unauthenticated POST request to a specified route with a given body
 export const makeUnauthPostReq = async (route, body) => {

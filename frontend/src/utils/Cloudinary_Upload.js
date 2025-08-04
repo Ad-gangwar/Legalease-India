@@ -1,5 +1,5 @@
-const {cloudinary_upload_preset} = require('./config');
-const {cloud_name} = require('./config');
+const cloudinary_upload_preset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+const cloud_name = process.env.REACT_APP_CLOUD_NAME;
 
 const uploadImgToCloudinary = async(file)=>{
     const uploadData=new FormData();
