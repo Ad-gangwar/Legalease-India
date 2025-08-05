@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 
-export default function Success() {
+export default function Cancel() {
   
-  useEffect=(()=>{
+  useEffect(() => {
     toast('Service request sent but could not complete payment!', {
       icon: '😒',
     });
-  })
+  }, []);
+  
   const navigate = useNavigate();
   return (
     <Layout>

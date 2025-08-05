@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import HelpImage from '../assets/images/help-image.png';
 import Layout from './Layout/Layout';
 import { Icon } from '@iconify/react';

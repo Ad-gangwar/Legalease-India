@@ -4,7 +4,7 @@ import ServiceProviderCard from '../shared/ServiceProviderCard';
 import { makeUnauthGetReq } from '../../utils/serverHelper';
 import toast from 'react-hot-toast';
 import Reviews from '../shared/Reviews';
-import Loading, { ErrorFallback, EmptyState, CardSkeleton } from '../Loader/Loading';
+import { ErrorFallback, EmptyState, CardSkeleton } from '../Loader/Loading';
 
 export default function ServiceProviders() {
   const [serviceProviders, setServiceProviders] = useState([]);

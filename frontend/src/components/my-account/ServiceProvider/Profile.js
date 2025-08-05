@@ -138,7 +138,7 @@ export default function Profile({ serviceProvider }) {
       });
   
       if (response.ok) {
-        const responseData = await response.json();
+        await response.json();
         // console.log(responseData);
         toast.success("Updated Successfully!");
         window.location.reload();

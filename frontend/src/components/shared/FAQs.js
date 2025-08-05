@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { faqs } from '../../assets/data/faqs';
-import { Icon } from '@iconify/react';
 
 export default function FAQs() {
     const [selectedQuestion, setSelectedQuestion] = useState(null);

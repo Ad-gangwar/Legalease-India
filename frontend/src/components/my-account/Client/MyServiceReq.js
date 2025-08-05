@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import UserFetchData from '../../../hooks/userFetchData';
 import Loading, { ErrorFallback, EmptyState } from '../../Loader/Loading';
 import formatDate from '../../../utils/formatDate';
-import { Link } from 'react-router-dom';
 import { makeAuthPostReq } from '../../../utils/serverHelper';
 import toast from 'react-hot-toast';
 import { Icon } from '@iconify/react';

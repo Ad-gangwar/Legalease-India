@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react'
+import {useEffect, useState, useCallback} from 'react'
 import {makeAuthGetReq} from '../utils/serverHelper';
 
 const UserFetchData=(url, options = {}) => {
