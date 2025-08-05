@@ -400,109 +400,214 @@ export default function GenericService() {
     return (
         <Layout>
             {serviceDetails.title ? (
-                <div className='container'>
-                    <section className='my-5 mb-3'>
-                        <div className='d-flex gap-3 align-items-center mb-4'>
-                            <span><h4>Select a Service Provider to continue: </h4></span>
-                            <button className='btn btn-danger rounded-pill my-3 p-3 my-bold' onClick={() => navigate('/serviceProviders')}>
-                                {loading ? <HashLoader size={35} color='white' /> : 'Select Service Provider'}
-                            </button>
-                            {selectedServiceProvider && <h5 className='my-bold'>{selectedServiceProvider.name}</h5>}
+                <div className='container py-5'>
+                    {/* Header Section */}
+                    <div className='text-center mb-5'>
+                        <div className='d-flex justify-content-center align-items-center mb-3'>
+                            <div className='bg-danger rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '60px', height: '60px' }}>
+                                <Icon icon="mdi:gavel" className="text-white" width={30} />
+                            </div>
+                            <h2 className='fw-bold text-dark mb-0'>{serviceDetails.title}</h2>
                         </div>
-                        <h2 className='text-center iconText myText'>{serviceDetails.title}</h2>
-                        <p className='text-center mb-4'>{serviceDetails.description}</p>
-                        
-                        <div className='w-100 mx-auto'>
-                            <div className='p-4'>
-                                <div className='w-100 h-100 p-4 px-5 shadow-lg'>
-                                    <span className='d-inline-flex p-2 rounded-end mb-2 my-bold' style={{ color: "#7c5300", backgroundColor: "#eadad973" }}>
-                                        Service Requirements
-                                    </span>
-                                    <ul>
-                                        {serviceDetails.requirements.map((requirement, index) => (
-                                            <li className='my-1' key={index}>{requirement}</li>
-                                        ))}
-                                    </ul>
-                                    <div>
-                                        <span>Upload relevant documents (less than 250 KB each)</span>
-                                        <div className='mt-3'>
-                                            <input
-                                                type='file'
-                                                name='photo'
-                                                id='customFile'
-                                                onChange={handleFileInputChange}
-                                                accept='.jpg, .png, .pdf'
-                                                className='cursor-pointer h-100 w-100'
-                                                multiple
-                                                disabled={uploading}
+                        <p className='text-muted fs-5'>Upload the required documents to proceed with your service request</p>
+                    </div>
+
+                    {/* Service Provider Selection Section */}
+                    <div className='card border-0 shadow-lg mb-5' style={{ borderRadius: '15px' }}>
+                        <div className='card-body p-4' style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' }}>
+                            <div className='d-flex justify-content-between align-items-center'>
+                                <div>
+                                    <h5 className='fw-semibold text-dark mb-1'>
+                                        <Icon icon="mdi:account-tie" className="me-2 text-danger" />
+                                        Service Provider Selection
+                                    </h5>
+                                    <p className='text-muted mb-0'>Choose a service provider to continue with your request</p>
+                                </div>
+                                <div className='d-flex align-items-center gap-3'>
+                                    {selectedServiceProvider && (
+                                        <div className='d-flex align-items-center'>
+                                            <img 
+                                                src={selectedServiceProvider.photo} 
+                                                className='rounded-circle me-2 shadow-sm' 
+                                                style={{ width: '40px', height: '40px', objectFit: 'cover' }} 
+                                                alt={selectedServiceProvider.name} 
                                             />
-                                            {uploading && (
-                                                <div className='mt-2 text-center'>
-                                                    <HashLoader size={20} color='#dc3545' />
-                                                    <span className='ms-2'>Uploading...</span>
-                                                </div>
-                                            )}
+                                            <span className='fw-semibold text-dark'>{selectedServiceProvider.name}</span>
                                         </div>
-                                        
-                                        {/* Display uploaded documents */}
-                                        {docs.length > 0 && (
-                                            <div className='mt-4'>
-                                                <h6 className='mb-3'>Uploaded Documents ({docs.length})</h6>
-                                                <div className='row'>
-                                                    {docs.map((doc, index) => (
-                                                        <div key={index} className='col-md-6 col-lg-4 mb-3'>
-                                                            <div className='card border p-3 position-relative'>
-                                                                <div className='d-flex align-items-center'>
-                                                                    <Icon 
-                                                                        icon="mdi:file-document-outline" 
-                                                                        width={24} 
-                                                                        className='me-2 text-primary'
-                                                                    />
-                                                                    <div className='flex-grow-1'>
-                                                                        <small className='text-muted d-block'>{doc.name}</small>
-                                                                        <small className='text-success'>✓ Uploaded</small>
-                                                                    </div>
-                                                                    <button
-                                                                        type='button'
-                                                                        className='btn btn-sm btn-outline-danger ms-2'
-                                                                        onClick={() => removeDocument(index)}
-                                                                        title='Remove document'
-                                                                    >
-                                                                        <Icon icon="mdi:close" width={16} />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                    )}
+                                    <button 
+                                        className='btn btn-danger rounded-pill px-4 py-2 shadow-sm' 
+                                        onClick={() => navigate('/serviceProviders')}
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <div className='d-flex align-items-center'>
+                                                <HashLoader size={20} color='white' />
+                                                <span className='ms-2'>Processing...</span>
+                                            </div>
+                                        ) : (
+                                            <div className='d-flex align-items-center'>
+                                                <Icon icon="mdi:account-search" className="me-2" />
+                                                {selectedServiceProvider ? 'Change Provider' : 'Select Provider'}
                                             </div>
                                         )}
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section>
-                        <h2 className='iconText myText my-4'>Service Features</h2>
-                        <ul>
-                            {serviceDetails.points.map((point, index) => (
-                                <li key={index} className='my-3'>{point}</li>
-                            ))}
-                        </ul>
-                    </section>
+                    {/* Required Documents Section */}
+                    <div className='mb-5'>
+                        <div className='text-center mb-4'>
+                            <h3 className='fw-bold text-dark mb-2'>
+                                <Icon icon="mdi:clipboard-list" className="me-2 text-danger" />
+                                Required Documents
+                            </h3>
+                            <p className='text-muted'>Please upload relevant documents to support your service request</p>
+                        </div>
+                        
+                        {/* Document Upload Area */}
+                        <div className='card border-0 shadow-lg' style={{ borderRadius: '15px' }}>
+                            <div className='card-body p-4'>
+                                <div className='d-flex align-items-center mb-4'>
+                                    <div className='bg-info rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '50px', height: '50px' }}>
+                                        <Icon icon="mdi:cloud-upload" className="text-white" width={25} />
+                                    </div>
+                                    <h3 className='fw-bold text-dark mb-0'>Upload Documents</h3>
+                                </div>
+                                <p className='text-muted mb-4'>Upload relevant documents to support your service request (Maximum 250 KB per file)</p>
+                                
+                                <div className='text-center p-4 border-2 border-dashed border-secondary rounded' style={{ borderStyle: 'dashed' }}>
+                                    <Icon icon="mdi:file-document-multiple" className="text-muted mb-3" width={48} />
+                                    <p className='text-muted mb-3'>Upload supporting documents for your service request</p>
+                                    <p className='small text-muted mb-3'>Maximum file size: 250 KB per file</p>
+                                    <input
+                                        type='file'
+                                        name='photo'
+                                        id='customFile'
+                                        onChange={handleFileInputChange}
+                                        accept='.jpg, .png, .pdf'
+                                        className='form-control'
+                                        multiple
+                                        disabled={uploading}
+                                    />
+                                    {uploading && (
+                                        <div className='mt-3 text-center'>
+                                            <HashLoader size={25} color='#dc3545' />
+                                            <p className='text-muted mt-2 mb-0'>Uploading documents...</p>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                {/* Display uploaded documents */}
+                                {docs.length > 0 && (
+                                    <div className='mt-4'>
+                                        <h6 className='mb-3'>Uploaded Documents ({docs.length})</h6>
+                                        <div className='row'>
+                                            {docs.map((doc, index) => (
+                                                <div key={index} className='col-md-6 col-lg-4 mb-3'>
+                                                    <div className='card border p-3 position-relative'>
+                                                        <div className='d-flex align-items-center'>
+                                                            <Icon 
+                                                                icon="mdi:file-document-outline" 
+                                                                width={24} 
+                                                                className='me-2 text-primary'
+                                                            />
+                                                            <div className='flex-grow-1'>
+                                                                <small className='text-muted d-block'>{doc.name}</small>
+                                                                <small className='text-success'>✓ Uploaded</small>
+                                                            </div>
+                                                            <button
+                                                                type='button'
+                                                                className='btn btn-sm btn-outline-danger ms-2'
+                                                                onClick={() => removeDocument(index)}
+                                                                title='Remove document'
+                                                            >
+                                                                <Icon icon="mdi:close" width={16} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Points to Remember Section */}
+                    <div className='card border-0 shadow-lg mb-5' style={{ borderRadius: '15px' }}>
+                        <div className='card-body p-4'>
+                            <div className='d-flex align-items-center mb-4'>
+                                <div className='bg-warning rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm' style={{ width: '50px', height: '50px' }}>
+                                    <Icon icon="mdi:lightbulb" className="text-white" width={25} />
+                                </div>
+                                <h3 className='fw-bold text-dark mb-0'>Service Features</h3>
+                            </div>
+                            <div className='row'>
+                                {serviceDetails.points.map((point, index) => (
+                                    <div key={index} className='col-md-6 mb-3'>
+                                        <div className='d-flex align-items-start'>
+                                            <Icon icon="mdi:check-circle" className="text-success me-2 mt-1" width={20} />
+                                            <p className='mb-0 text-dark'>{point}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                     
-                    <p className='my-4'><span className='my-bold'>Note: </span>This is test payment gateway of Stripe. Use <span className='iconText'>4000003560000008</span> as the card number to successfully complete the payment. Remember to copy it before proceeding to payment page.</p>
-                    <button 
-                        className='btn btn-danger rounded-pill mx-auto d-block mt-4 mb-5 p-3 fs-5 my-bold px-5' 
-                        onClick={handleSubmit}
-                        disabled={loading || uploading}
-                    >
-                        {loading ? <HashLoader size={25} color='white' /> : 'Request Service'}
-                    </button>
+                    {/* Payment Note */}
+                    <div className='alert alert-info border-0 shadow-sm' style={{ borderRadius: '12px' }}>
+                        <div className='d-flex align-items-center'>
+                            <Icon icon="mdi:credit-card" className="me-3 text-info" width={24} />
+                            <div>
+                                <h6 className='fw-semibold mb-1'>Payment Information</h6>
+                                <p className='mb-0'>
+                                    This is a test payment gateway. Use <span className='fw-bold text-danger'>4000003560000008</span> as the card number to complete the payment successfully.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className='text-center'>
+                        <button 
+                            className='btn btn-danger btn-lg rounded-pill px-5 py-3 shadow-lg' 
+                            onClick={handleSubmit}
+                            disabled={loading || uploading}
+                            style={{ fontSize: '1.1rem' }}
+                        >
+                            {loading ? (
+                                <div className='d-flex align-items-center'>
+                                    <HashLoader size={25} color='white' />
+                                    <span className='ms-3'>Processing Request...</span>
+                                </div>
+                            ) : (
+                                <div className='d-flex align-items-center'>
+                                    <Icon icon="mdi:send" className="me-2" />
+                                    Request Service
+                                </div>
+                            )}
+                        </button>
+                    </div>
                 </div>
             ) : (
-                <div className='text-center my-5 h2 py-4'>😒 Service Details not found!</div>
+                <div className='container py-5'>
+                    <div className='text-center'>
+                        <div className='bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4' style={{ width: '100px', height: '100px' }}>
+                            <Icon icon="mdi:gavel-off" className="text-muted" width={50} />
+                        </div>
+                        <h2 className='fw-bold text-muted mb-3'>Service Details Not Found</h2>
+                        <p className='text-muted fs-5'>The requested service could not be found.</p>
+                        <button className='btn btn-danger rounded-pill px-4 py-2' onClick={() => navigate('/services')}>
+                            <Icon icon="mdi:arrow-left" className="me-2" />
+                            Back to Services
+                        </button>
+                    </div>
+                </div>
             )}
         </Layout>
     )
